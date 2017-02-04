@@ -50,9 +50,9 @@ S=${WORKDIR}
 RESTRICT="mirror"
 
 QA_PREBUILT="
-	opt/discord-canary/share/discord/Discord
-	opt/discord-canary/share/discord/libnode.so
-	opt/discord-canary/share/discord/libffmpeg.so
+	opt/discord-canary/share/discord-canary/DiscordCanary
+	opt/discord-canary/share/discord-canary/libnode.so
+	opt/discord-canary/share/discord-canary/libffmpeg.so
 "
 
 src_unpack() {
