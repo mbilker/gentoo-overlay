@@ -22,13 +22,14 @@ RDEPEND="virtual/glu
 
 #QA_TEXTRELS="usr/lib32/Leap/libLeap.so"
 
+S="${WORKDIR}"
+
 src_configure() {
-	einfo "Extracting data.tar.gz from ${P}.deb ..."
-	unpack_deb "${S}/${P}.deb"
+	:
 }
 
 src_compile() {
-	:
+	rm opt/fman/libreadline*
 }
 
 src_install() {
@@ -41,4 +42,8 @@ src_install() {
 
 	insinto /opt
 	doins -r opt/fman
+
+	exeinto /opt/fman
+	doexe opt/fman/fman
+	doexe opt/fman/lib*.so*
 }
