@@ -181,13 +181,4 @@ src_install() {
 pkg_postinst() {
 	# Add pax markings for hardened systems
 	pax-mark -m "${EPREFIX}"/usr/games/bin/"${PN}"
-
-	if ! use portaudio; then
-		ewarn "If you want microphone capabilities in dolphin-emu, rebuild with"
-		ewarn "USE=\"portaudio\""
-	fi
-	if ! use wxwidgets; then
-		ewarn "Note: It is not currently possible to configure Dolphin without the GUI."
-		ewarn "Rebuild with USE=\"wxwidgets\" to enable the GUI if needed."
-	fi
 }
