@@ -76,9 +76,10 @@ src_prepare() {
 	# Remove ALL the bundled libraries, aside from:
 	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
 	# - cpp-optparse: Their build set up makes this not conditional
-	# - SOIL: The sources are not public.
-	# - gtest: Their build set up solely relies on the build in gtest.
+	# - SOIL: The sources are not public
+	# - gtest: Their build set up solely relies on the build in gtest
 	# - glslang: Their build set up makes this not conditional
+	# - soundtouch: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
 	# - portaudio: USE flag
 	# - wxWidgets3: 3.1 development version ebuild not available in Portage
@@ -87,6 +88,7 @@ src_prepare() {
 	mv Externals/SOIL . || die
 	mv Externals/glslang . || die
 	mv Externals/gtest . || die
+	mv Externals/soundtouch . || die
 	mv Externals/xxhash . || die
 	mv Externals/wxWidgets3 . || die
 
@@ -104,6 +106,7 @@ src_prepare() {
 	mv SOIL Externals || die
 	mv glslang Externals || die
 	mv gtest Externals || die
+	mv soundtouch Externals || die
 	mv xxhash Externals || die
 	mv wxWidgets3 Externals || die
 
