@@ -7,18 +7,27 @@ PLOCALES="ar ca cs da_DK de el en es fa fr hr hu it ja ko ms_MY nb nl pl pt_BR p
 PLOCALE_BACKUP="en"
 WX_GTK_VER="3.0"
 
-inherit cmake-utils eutils l10n pax-utils toolchain-funcs versionator wxwidgets git-r3
+inherit cmake-utils eutils l10n pax-utils toolchain-funcs versionator wxwidgets
 
-DESCRIPTION="Nintendo GameCube and Wii emulator"
-HOMEPAGE="http://www.dolphin-emu.org/"
-SRC_URI=""
-EGIT_REPO_URI="https://github.com/dolphin-emu/dolphin"
+if [[ ${PV} == 9999* ]]
+then
+	EGIT_REPO_URI="https://github.com/dolphin-emu/dolphin"
+	inherit git-r3
+	KEYWORDS=""
+else
+	SRC_URI="https://github.com/${PN}-emu/${PN}/archive/${PV}.zip -> ${P}.zip"
+	KEYWORDS="~amd64"
+fi
+
+DESCRIPTION="GameCube and Wii game emulator"
+HOMEPAGE="https://www.dolphin-emu.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="alsa ao bluetooth doc egl +evdev ffmpeg llvm openal profile pulseaudio +qt5 sdl system-enet system-portaudio upnp +wxwidgets"
 
 RDEPEND=">=media-libs/libsfml-2.1
+	system-enet? ( >net-libs/enet-1.3.7 )
 	>=net-libs/mbedtls-2.1.1
 	>=media-libs/glew-1.5
 	dev-libs/lzo
@@ -37,15 +46,16 @@ RDEPEND=">=media-libs/libsfml-2.1
 	bluetooth? ( net-wireless/bluez )
 	egl? ( media-libs/mesa[egl] )
 	evdev? (
-		dev-libs/libevdev
-		virtual/udev
+			dev-libs/libevdev
+			virtual/udev
 	)
-	ffmpeg? ( media-video/ffmpeg )
+	ffmpeg? ( virtual/ffmpeg )
 	llvm? ( sys-devel/llvm )
 	openal? (
-		media-libs/openal
-		media-libs/libsoundtouch
+			media-libs/openal
+			media-libs/libsoundtouch
 	)
+	system-portaudio? ( media-libs/portaudio )
 	profile? ( dev-util/oprofile )
 	pulseaudio? ( media-sound/pulseaudio )
 	qt5? (
@@ -54,13 +64,11 @@ RDEPEND=">=media-libs/libsfml-2.1
 		dev-qt/qtwidgets:5
 	)
 	sdl? ( media-libs/libsdl2[haptic,joystick] )
-	system-enet? ( >net-libs/enet-1.3.7 )
-	system-portaudio? ( media-libs/portaudio )
 	upnp? ( >=net-libs/miniupnpc-1.7 )
 	wxwidgets? (
-		dev-libs/glib:2
-		x11-libs/gtk+:2
-		x11-libs/wxGTK:${WX_GTK_VER}[opengl,X]
+			dev-libs/glib:2
+			x11-libs/gtk+:2
+			x11-libs/wxGTK:${WX_GTK_VER}[opengl,X]
 	)
 	"
 DEPEND="${RDEPEND}
@@ -74,10 +82,10 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	# Remove ALL the bundled libraries, aside from:
+	# - SOIL: The sources are not public.
+	# - gtest: Their build set up solely relies on the build in gtest.
 	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
 	# - cpp-optparse: Their build set up makes this not conditional
-	# - SOIL: The sources are not public
-	# - gtest: Their build set up solely relies on the build in gtest
 	# - glslang: Their build set up makes this not conditional
 	# - soundtouch: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
@@ -131,26 +139,30 @@ src_prepare() {
 }
 
 src_configure() {
+	if use wxwidgets; then
+		need-wxwidgets unicode
+	fi
+
 	# Configure cmake
-	mycmakeargs="
+	local mycmakeargs=(
 		-DDISTRIBUTOR=Gentoo
-		$(cmake-utils_use alsa ENABLE_ALSA)
-		$(cmake-utils_use ao ENABLE_AO)
-		$(cmake-utils_use bluetooth ENABLE_BLUEZ)
-		$(cmake-utils_use evdev ENABLE_EVDEV)
-		$(cmake-utils_use egl USE_EGL)
-		$(cmake-utils_use ffmpeg ENCODE_FRAMEDUMPS)
-		$(cmake-utils_use llvm ENABLE_LLVM)
-		$(cmake-utils_use openal ENABLE_OPENAL)
-		$(cmake-utils_use profile OPROFILING)
-		$(cmake-utils_use pulseaudio ENABLE_PULSEAUDIO)
-		$(cmake-utils_use qt5 ENABLE_QT2)
-		$(cmake-utils_use sdl ENABLE_SDL)
+		$( cmake-utils_use ffmpeg ENCODE_FRAMEDUMPS )
+		$( cmake-utils_use profile OPROFILING )
+		$( cmake-utils_use_disable wxwidgets WX )
+		$( cmake-utils_use_enable alsa ALSA )
+		$( cmake-utils_use_enable ao AO )
+		$( cmake-utils_use_enable bluetooth BLUEZ )
+		$( cmake-utils_use_enable evdev EVDEV )
+		$( cmake-utils_use_enable llvm LLVM )
+		$( cmake-utils_use_enable openal OPENAL )
+		$( cmake-utils_use_enable pulseaudio PULSEAUDIO )
+		$( cmake-utils_use_enable qt5 QT2 )
+		$( cmake-utils_use_enable sdl SDL )
 		$(cmake-utils_use system-enet USE_SHARED_ENET)
 		$(cmake-utils_use system-portaudio SYSTEM_PORTAUDIO)
-		$(cmake-utils_use upnp USE_UPNP)
-		$(cmake-utils_use !wxwidgets DISABLE_WX)"
-
+		$( cmake-utils_use_use egl EGL )
+		$( cmake-utils_use_use upnp UPNP )
+	)
 
 	cmake-utils_src_configure
 }
