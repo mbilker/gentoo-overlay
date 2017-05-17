@@ -35,7 +35,6 @@ src_compile() {
 src_install() {
 	insinto /usr/bin
 	dobin usr/bin/fman
-	dobin usr/bin/update-fman
 
 	insinto /usr/share
 	doins -r usr/share/*
