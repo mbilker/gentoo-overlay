@@ -1,36 +1,30 @@
-# $Header: $
+# Copyright 1999-2017 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
 
-EAPI="5"
+EAPI=6
+
 RESTRICT="mirror test strip"
 
 inherit eutils udev unpacker
 
 DESCRIPTION="A modern file manager for power users."
 HOMEPAGE="https://fman.io"
-SRC_URI="http://download.fman.io/fman.deb"
+SRC_URI="https://fman.io/updates/arch/fman-${PV}.pkg.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="-* amd64 ~x86"
+KEYWORDS="-* amd64"
 IUSE=""
 
 DEPEND=""
-RDEPEND="virtual/glu
+RDEPEND=">=dev-qt/qtcore-5.6.2
 	sys-apps/dbus
+	sys-libs/readline
 	x11-libs/libX11
-	x11-libs/libXi"
-
-#QA_TEXTRELS="usr/lib32/Leap/libLeap.so"
+	x11-libs/libXi
+	virtual/glu"
 
 S="${WORKDIR}"
-
-src_configure() {
-	:
-}
-
-src_compile() {
-	rm opt/fman/libreadline*
-}
 
 src_install() {
 	insinto /usr/bin
