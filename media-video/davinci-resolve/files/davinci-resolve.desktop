@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=DaVinci Resolve
+Comment=Professional non-linear editing
+Exec=/opt/resolve/bin/resolve.sh
+Icon=/opt/resolve/rsf/DV_Resolve.png
+Terminal=false
+Categories=AudioVideo;
