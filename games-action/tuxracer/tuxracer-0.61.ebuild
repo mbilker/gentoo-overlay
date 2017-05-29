@@ -17,7 +17,7 @@ IUSE=""
 RDEPEND="virtual/opengl
 	virtual/glu
 	>=media-libs/sdl-sound-1.0.3-r1
-	>=media-libs/sdl-mixer-1.2.12-r4[mod,mikmod]
+	>=media-libs/sdl-mixer-1.2.12-r4[mod]
 	>=media-libs/libsfml-2.2"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig"
