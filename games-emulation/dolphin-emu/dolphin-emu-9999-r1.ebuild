@@ -85,6 +85,7 @@ src_prepare() {
 	# - SOIL: The sources are not public.
 	# - gtest: Their build set up solely relies on the build in gtest.
 	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
+	# - cubeb: Their build set up makes this not conditional
 	# - cpp-optparse: Their build set up makes this not conditional
 	# - glslang: Their build set up makes this not conditional
 	# - soundtouch: Their build set up makes this not conditional
@@ -92,6 +93,7 @@ src_prepare() {
 	# - portaudio: USE flag
 	# - wxWidgets3: 3.1 development version ebuild not available in Portage
 	mv Externals/Bochs_disasm . || die
+	mv Externals/cubeb . || die
 	mv Externals/cpp-optparse . || die
 	mv Externals/SOIL . || die
 	mv Externals/glslang . || die
@@ -110,6 +112,7 @@ src_prepare() {
 	rm -r Externals/* || die "Failed to delete Externals dir."
 
 	mv Bochs_disasm Externals || die
+	mv cubeb Externals || die
 	mv cpp-optparse Externals || die
 	mv SOIL Externals || die
 	mv glslang Externals || die
