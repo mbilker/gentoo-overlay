@@ -29,7 +29,7 @@ IUSE="alsa ao bluetooth doc egl +evdev ffmpeg llvm openal profile pulseaudio +qt
 RDEPEND=">=media-libs/libsfml-2.1
 	system-enet? ( >net-libs/enet-1.3.7 )
 	>=net-libs/mbedtls-2.1.1
-	>=media-libs/glew-1.5
+	media-libs/glew:=
 	dev-libs/lzo
 	media-libs/libpng:=
 	sys-libs/glibc
@@ -38,7 +38,7 @@ RDEPEND=">=media-libs/libsfml-2.1
 	x11-libs/libXext
 	x11-libs/libXi
 	x11-libs/libXrandr
-	virtual/jpeg
+	virtual/jpeg:=
 	virtual/libusb:1
 	virtual/opengl
 	alsa? ( media-libs/alsa-lib )
@@ -50,7 +50,7 @@ RDEPEND=">=media-libs/libsfml-2.1
 			virtual/udev
 	)
 	ffmpeg? ( virtual/ffmpeg )
-	llvm? ( sys-devel/llvm )
+	llvm? ( sys-devel/llvm:= )
 	openal? (
 			media-libs/openal
 			media-libs/libsoundtouch
