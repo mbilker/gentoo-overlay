@@ -28,5 +28,5 @@ src_configure() {
 
 src_install() {
 	DIST_ROOT="${D}" emake install || die "emake failed"
-	dodoc CHANGELOG README
+	dodoc CHANGELOG README.md
 }
