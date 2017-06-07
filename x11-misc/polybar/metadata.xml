@@ -8,7 +8,6 @@
 		<flag name="mpd">Enables support for display of mpd controlled music</flag>
 		<flag name="network">Enables network monitoring features</flag>
 		<flag name="verbose-debug">Enables verbose debug messages</flag>
-		<flag name="xkb">Enables XCB Keyboard extension support</flag>
 		<flag name="xrender">Enables XRender window extension support (transparency)</flag>
 	</use>
 </pkgmetadata>
