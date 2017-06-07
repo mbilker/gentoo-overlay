@@ -70,19 +70,18 @@ src_prepare(){
 }
 
 src_install() {
-	pax-mark m ${MY_PN}
+	pax-mark -m ${MY_PN}
 	if use !system-node; then
-		pax-mark m resources/app/apm/bin/node
+		pax-mark -m resources/app/apm/bin/node
 	fi
-	insinto ${EPREFIX}/usr/share/${MY_PN}
+	insinto /usr/share/${MY_PN}
 	doins -r .
 	doicon ${MY_PN}.png
-	insinto ${EPREFIX}/usr/share/doc/${MY_PN}
+	insinto /usr/share/doc/${MY_PN}
 	newins resources/LICENSE.md copyright
-	newbin ${FILESDIR}/${MY_PN}.sh ${MY_PN}
-	insinto ${EPREFIX}/usr/share/lintian/overrides
-	#newins ${FILESDIR}/${MY_PN}-lintian ${MY_PN}
-	dosym ${EPREFIX}/usr/share/${MY_PN}/resources/app/apm/bin/apm ${EPREFIX}/usr/bin/apm
+	newbin "${FILESDIR}/${MY_PN}.sh" "${MY_PN}"
+	insinto /usr/share/lintian/overrides
+	dosym /usr/share/${MY_PN}/resources/app/apm/bin/apm /usr/bin/apm
 
 	# Fixes permissions
 	fperms +x /usr/bin/${MY_PN}
