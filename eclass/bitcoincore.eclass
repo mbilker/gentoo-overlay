@@ -403,7 +403,6 @@ bitcoincore_src_test() {
 
 bitcoincore_src_install() {
 	default
-	[ "${PN}" = "libbitcoinconsensus" ] || rm "${D}/usr/bin/test_bitcoin"
 }
 
 _BITCOINCORE_ECLASS=1
