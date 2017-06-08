@@ -26,7 +26,5 @@ src_configure() {
 src_install() {
 	bitcoincore_src_install
 
-	doman contrib/debian/manpages/bitcoin-cli.1
-
 	newbashcomp contrib/bitcoind.bash-completion ${PN}
 }
