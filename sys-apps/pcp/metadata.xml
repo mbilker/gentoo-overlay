@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
+	<use>
+		<flag name="webapi">Enable webapi support binary</flag>
+	</use>
 	<maintainer type="person">
 		<email>gentoo@mbilker.us</email>
 		<name>Matt Bilker</name>

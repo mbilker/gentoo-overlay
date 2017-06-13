@@ -12,7 +12,7 @@ SRC_URI="https://github.com/performancecopilot/${PN}/archive/${PV}.tar.gz -> ${P
 LICENSE="LGPL-2.1"
 SLOT="0"
 KEYWORDS="amd64 ~x86"
-IUSE=""
+IUSE="+webapi"
 DEPEND=""
 RDEPEND=""
 
@@ -23,7 +23,8 @@ pkg_setup() {
 
 src_configure() {
 	filter-flags -fomit-frame-pointer
-	econf
+	econf \
+		$(use_enable webapi)
 }
 
 src_install() {
