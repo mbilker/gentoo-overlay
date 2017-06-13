@@ -24,7 +24,7 @@ pkg_setup() {
 src_configure() {
 	filter-flags -fomit-frame-pointer
 	econf \
-		$(use_enable webapi)
+		$(use_with webapi)
 }
 
 src_install() {
