@@ -89,6 +89,7 @@ src_prepare() {
 	# - cpp-optparse: Their build set up makes this not conditional
 	# - glslang: Their build set up makes this not conditional
 	# - soundtouch: Their build set up makes this not conditional
+	# - pugixml: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
 	# - portaudio: USE flag
 	# - wxWidgets3: 3.1 development version ebuild not available in Portage
@@ -98,6 +99,7 @@ src_prepare() {
 	mv Externals/SOIL . || die
 	mv Externals/glslang . || die
 	mv Externals/gtest . || die
+	mv Externals/pugixml . || die
 	mv Externals/soundtouch . || die
 	mv Externals/xxhash . || die
 	mv Externals/wxWidgets3 . || die
@@ -117,6 +119,7 @@ src_prepare() {
 	mv SOIL Externals || die
 	mv glslang Externals || die
 	mv gtest Externals || die
+	mv pugixml Externals || die
 	mv soundtouch Externals || die
 	mv xxhash Externals || die
 	mv wxWidgets3 Externals || die
