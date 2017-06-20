@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<use>
+		<flag name="c_sync">Enable C Synchronous API</flag>
+		<flag name="cpp">Enable C++ API</flag>
+		<flag name="fakenect">Build fakenect utility to replay Kinect captures</flag>
+		<flag name="opencv">Enable opencv integration</flag>
+		<flag name="openni2">Enable openni2 integration</flag>
+	</use>
+	<maintainer type="person">
+		<email>gentoo@mbilker.us</email>
+		<name>Matt Bilker</name>
+	</maintainer>
+</pkgmetadata>
