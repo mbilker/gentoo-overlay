@@ -14,8 +14,8 @@ DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
 
 if [[ ${PV} != *9999* ]]; then
-	SRC_URI="https://github.com/mpv-player/mpv/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ppc ~ppc64 ~x86 ~amd64-linux"
+	SRC_URI="https://github.com/mpv-player/mpv/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 	DOCS=( RELEASE_NOTES )
 else
 	EGIT_REPO_URI=( {https,git}://github.com/mpv-player/mpv.git )
@@ -30,8 +30,9 @@ SLOT="0"
 IUSE="+alsa aqua archive bluray cdda +cli coreaudio cplugins cuda doc drm dvb
 	dvd +egl encode gbm +iconv jack jpeg lcms +libass libav libcaca libmpv +lua
 	luajit openal +opengl oss pulseaudio raspberry-pi rubberband samba sdl
-	selinux test tools +uchardet v4l vaapi +vapoursynth vdpau vf-dlopen wayland
-	+X +xv zsh-completion cpu_flags_x86_sse4_1"
+	selinux test tools +uchardet v4l vaapi +vapoursynth vdpau wayland
+	+X +xv zsh-completion"
+IUSE+=" cpu_flags_x86_sse4_1"
 
 REQUIRED_USE="
 	|| ( cli libmpv )
@@ -192,7 +193,6 @@ src_configure() {
 
 		$(use_enable doc pdf-build)
 		$(use_enable cplugins)
-		$(use_enable vf-dlopen vf-dlopen-filters)
 		$(use_enable zsh-completion zsh-comp)
 		$(use_enable test)
 
