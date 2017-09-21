@@ -13,11 +13,12 @@ SRC_URI="https://fman.io/updates/arch/fman-${PV}.pkg.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="-* amd64"
+KEYWORDS="~amd64"
 IUSE=""
 
 DEPEND=""
-RDEPEND=">=dev-qt/qtcore-5.6.2
+RDEPEND="dev-lang/python:3.6=
+	>=dev-qt/qtcore-5.6.2
 	sys-apps/dbus
 	sys-libs/readline
 	x11-libs/libX11
