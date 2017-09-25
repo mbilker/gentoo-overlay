@@ -9,7 +9,8 @@ inherit eutils udev unpacker
 
 DESCRIPTION="A modern file manager for power users."
 HOMEPAGE="https://fman.io"
-SRC_URI="https://fman.io/updates/arch/fman-${PV}.pkg.tar.xz"
+#SRC_URI="https://fman.io/updates/arch/fman-${PV}.pkg.tar.xz"
+SRC_URI="http://download.fman.io/fman.deb -> fman-${PV}.deb"
 
 LICENSE="GPL-3"
 SLOT="0"
