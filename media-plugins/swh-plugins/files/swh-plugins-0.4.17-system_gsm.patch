@@ -1,0 +1,46 @@
+diff -ur ladspa-0.4.17.orig/configure.ac ladspa-0.4.17/configure.ac
+--- ladspa-0.4.17.orig/configure.ac	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/configure.ac	2017-10-15 01:36:26.700222394 -0400
+@@ -133,17 +133,19 @@
+   AC_DEFINE_UNQUOTED(PACKAGE_DATA_DIR, "${datadir}/${PACKAGE}")
+ fi
+ 
+-subdirs="util gsm gverb metadata"
++GSM_LIBS=-lgsm
++
++subdirs="util gverb metadata"
+ 
+ AC_SUBST(subdirs)
+ AC_SUBST(FFTW_LIBS)
+ AC_SUBST(STATIC_FFTW_LIBS)
+ AC_SUBST(FFTW_CFLAGS)
++AC_SUBST(GSM_LIBS)
+ AC_SUBST(LIBTOOL)
+ AC_OUTPUT([
+ Makefile
+ util/Makefile
+-gsm/Makefile
+ gverb/Makefile
+ metadata/Makefile
+ po/Makefile.in
+diff -ur ladspa-0.4.17.orig/Makefile.am ladspa-0.4.17/Makefile.am
+--- ladspa-0.4.17.orig/Makefile.am	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/Makefile.am	2017-10-15 01:35:59.499440558 -0400
+@@ -34,7 +34,7 @@
+ 	latency_1914.la xfade_1915.la sc4m_1916.la \
+ 	mbeq_1197.la pitch_scale_1193.la pitch_scale_1194.la imp_1199.la
+ 
+-SUBDIRS = po util gsm gverb metadata
++SUBDIRS = po util gverb metadata
+ 
+ # Wacky stuff to stop automake getting confused
+ EXTRA_DIST = config.rpath  @top_srcdir@/*.xml @top_srcdir@/*.c @top_srcdir@/*.h \
+@@ -73,7 +73,7 @@
+ sc4_1882_la_LIBADD = -Lutil -ldb -lrms
+ sc4m_1916_la_LIBADD = -Lutil -ldb -lrms
+ se4_1883_la_LIBADD = -Lutil -ldb -lrms
+-gsm_1215_la_LIBADD = gsm/libgsm.la
++gsm_1215_la_LIBADD = @GSM_LIBS@
+ gverb_1216_la_LIBADD = -Lgverb -lgverb
+ lcr_delay_1436_la_DEPENDENCIES = util/biquad.h
+ 

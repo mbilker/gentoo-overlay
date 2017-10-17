@@ -1,0 +1,11 @@
+diff -ur ladspa-0.4.17.orig/makestub.pl ladspa-0.4.17/makestub.pl
+--- ladspa-0.4.17.orig/makestub.pl	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/makestub.pl	2017-10-15 01:38:35.025193586 -0400
+@@ -73,6 +73,7 @@
+ 
+ \#ifdef ENABLE_NLS
+ \#include <libintl.h>
++\#include <locale.h>
+ \#endif
+ 
+ \#define         _ISOC9X_SOURCE  1

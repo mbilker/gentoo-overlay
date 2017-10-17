@@ -1,0 +1,90 @@
+diff -ur ladspa-0.4.17.orig/gsm/Makefile.am ladspa-0.4.17/gsm/Makefile.am
+--- ladspa-0.4.17.orig/gsm/Makefile.am	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/gsm/Makefile.am	2017-10-14 23:36:01.831678365 -0400
+@@ -2,12 +2,12 @@
+ RANLIB=ranlib
+ 
+ noinst_HEADERS = gsm.h config.h private.h proto.h unproto.h
+-noinst_LIBRARIES = libgsm.a
++noinst_LIBRARIES = libgsm.la
+ 
+ CFILES = add.c decode.c gsm_decode.c gsm_encode.c long_term.c preprocess.c \
+ 	short_term.c code.c gsm_create.c gsm_destroy.c gsm_option.c lpc.c rpe.c table.c
+ 
+-libgsm_a_SOURCES = $(CFILES) $(noinst_HEADERS)
++libgsm_la_SOURCES = $(CFILES) $(noinst_HEADERS)
+ 
+ # Disable autoheader. 
+ AUTOHEADER=echo
+diff -ur ladspa-0.4.17.orig/gverb/Makefile.am ladspa-0.4.17/gverb/Makefile.am
+--- ladspa-0.4.17.orig/gverb/Makefile.am	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/gverb/Makefile.am	2017-10-14 23:35:00.653567828 -0400
+@@ -3,9 +3,9 @@
+ 
+ noinst_HEADERS = gverb.h gverbdsp.h
+ 
+-noinst_LIBRARIES = libgverb.a
++noinst_LIBRARIES = libgverb.la
+ 
+-libgverb_a_SOURCES = gverb.c gverbdsp.c
++libgverb_la_SOURCES = gverb.c gverbdsp.c
+ 
+ # Disable autoheader. 
+ AUTOHEADER=echo
+diff -ur ladspa-0.4.17.orig/Makefile.am ladspa-0.4.17/Makefile.am
+--- ladspa-0.4.17.orig/Makefile.am	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/Makefile.am	2017-10-14 23:21:42.985193588 -0400
+@@ -61,11 +61,11 @@
+ imp_1199_la_LIBADD = $(FFTW_LIBS)
+ imp_1199_la_CFLAGS = $(FFTW_CFLAGS)
+ imp_1199_la_DEPENDENCIES = @top_srcdir@/impulses/*
+-hermes_filter_1200_la_DEPENDENCIES = util/libblo.a
++hermes_filter_1200_la_DEPENDENCIES = util/libblo.la
+ hermes_filter_1200_la_LIBADD = -Lutil -lblo
+-fm_osc_1415_la_DEPENDENCIES = util/libblo.a
++fm_osc_1415_la_DEPENDENCIES = util/libblo.la
+ fm_osc_1415_la_LIBADD = -Lutil -lblo
+-analogue_osc_1416_la_DEPENDENCIES = util/libblo.a
++analogue_osc_1416_la_DEPENDENCIES = util/libblo.la
+ analogue_osc_1416_la_LIBADD = -Lutil -lblo
+ sc1_1425_la_LIBADD = -Lutil -ldb -lrms
+ sc2_1426_la_LIBADD = -Lutil -ldb -lrms
+@@ -73,7 +73,7 @@
+ sc4_1882_la_LIBADD = -Lutil -ldb -lrms
+ sc4m_1916_la_LIBADD = -Lutil -ldb -lrms
+ se4_1883_la_LIBADD = -Lutil -ldb -lrms
+-gsm_1215_la_LIBADD = gsm/libgsm.a
++gsm_1215_la_LIBADD = gsm/libgsm.la
+ gverb_1216_la_LIBADD = -Lgverb -lgverb
+ lcr_delay_1436_la_DEPENDENCIES = util/biquad.h
+ 
+diff -ur ladspa-0.4.17.orig/util/Makefile.am ladspa-0.4.17/util/Makefile.am
+--- ladspa-0.4.17.orig/util/Makefile.am	2016-10-17 05:05:54.000000000 -0400
++++ ladspa-0.4.17/util/Makefile.am	2017-10-14 23:29:26.483876277 -0400
+@@ -3,17 +3,17 @@
+ 
+ noinst_HEADERS = rms.h db.h blo.h pitchscale.h waveguide_nl.h biquad.h iir.h buffer.h ls_filter.h
+ 
+-noinst_LIBRARIES = librms.a libdb.a libblo.a libpitchscale.a libiir.a
++noinst_LIBRARIES = librms.la libdb.la libblo.la libpitchscale.la libiir.la
+ 
+-librms_a_SOURCES = rms.c
+-libdb_a_SOURCES = db.c
+-libblo_a_SOURCES = blo.c
+-libblo_a_CFLAGS = -I@top_srcdir@
+-libpitchscale_a_SOURCES = pitchscale.c
+-libpitchscale_a_CFLAGS = $(FFTW_CFLAGS)
++librms_la_SOURCES = rms.c
++libdb_la_SOURCES = db.c
++libblo_la_SOURCES = blo.c
++libblo_la_CFLAGS = -I@top_srcdir@
++libpitchscale_la_SOURCES = pitchscale.c
++libpitchscale_la_CFLAGS = $(FFTW_CFLAGS)
+ #libpitchscale_a_LIBS = $(FFTW_LIBS)
+-libiir_a_SOURCES = iir.c
+-libiir_a_CPPFLAGS = -I@top_srcdir@
++libiir_la_SOURCES = iir.c
++libiir_la_CPPFLAGS = -I@top_srcdir@
+ #libbuffer_a_SOURCES = buffer.c
+ # Disable autoheader. 
+ AUTOHEADER=echo
