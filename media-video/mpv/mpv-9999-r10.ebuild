@@ -263,7 +263,7 @@ src_configure() {
 		--disable-apple-remote	# Needs testing first. See Gentoo bug 577332.
 
 		# Allow usage of official FFmpeg releases
-		--ffmpeg-upstream
+		--enable-ffmpeg-upstream
 	)
 
 	if use vaapi && use X; then
