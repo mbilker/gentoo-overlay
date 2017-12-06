@@ -5,7 +5,7 @@ EAPI=6
 
 RESTRICT="mirror test strip"
 
-inherit eutils udev unpacker
+inherit eutils gnome2-utils udev unpacker
 
 DESCRIPTION="A modern file manager for power users."
 HOMEPAGE="https://fman.io"
@@ -41,4 +41,12 @@ src_install() {
 	exeinto /opt/fman
 	doexe opt/fman/fman
 	doexe opt/fman/lib*.so*
+}
+
+pkg_postinst() {
+	gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	gnome2_icon_cache_update
 }
