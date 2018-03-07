@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -41,14 +41,6 @@ pkg_pretend() {
 		eerror "${PN} passes -std=c++14 to \${CXX} and requires a version"
 		eerror "of gcc newer than 5.1.0"
 	fi
-}
-
-src_prepare() {
-	default
-
-	# remove bundled libs
-	rm -r lib/i3ipcpp/libs/jsoncpp-1.7.7 || die
-	rm -r lib/jsoncpp-1.7.7.tar.gz || die
 }
 
 src_configure() {
