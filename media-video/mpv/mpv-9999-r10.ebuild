@@ -3,12 +3,12 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python{2_7,3_4,3_5} )
+PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
 PYTHON_REQ_USE='threads(+)'
 
 WAF_PV=1.9.8
 
-inherit gnome2-utils pax-utils python-r1 toolchain-funcs versionator waf-utils xdg-utils flag-o-matic
+inherit gnome2-utils pax-utils python-r1 toolchain-funcs versionator waf-utils xdg-utils
 
 DESCRIPTION="Media player based on MPlayer and mplayer2"
 HOMEPAGE="https://mpv.io/"
@@ -57,8 +57,8 @@ REQUIRED_USE="
 "
 
 COMMON_DEPEND="
-	!libav? ( >=media-video/ffmpeg-3.2.2:0=[encode?,threads,vaapi?,vdpau?] )
-	libav? ( >=media-video/libav-12:0=[encode?,threads,vaapi?,vdpau?] )
+	!libav? ( ~media-video/ffmpeg-${PV}:0=[encode?,threads,vaapi?,vdpau?] )
+	libav? ( ~media-video/libav-${PV}:0=[encode?,threads,vaapi?,vdpau?] )
 	alsa? ( >=media-libs/alsa-lib-1.0.18 )
 	archive? ( >=app-arch/libarchive-3.0.0:= )
 	bluray? ( >=media-libs/libbluray-0.3.0:= )
@@ -94,20 +94,13 @@ COMMON_DEPEND="
 	samba? ( net-fs/samba )
 	sdl? ( media-libs/libsdl2[sound,threads,video] )
 	v4l? ( media-libs/libv4l )
-	vaapi? (
-		!libav? ( >=media-video/ffmpeg-3.3:0 )
-		libav? ( >=media-video/libav-13:0 )
-		x11-libs/libva[drm?,X?,wayland?]
-	)
+	vaapi? ( x11-libs/libva:=[drm?,X?,wayland?] )
 	vapoursynth? ( media-libs/vapoursynth )
-	vdpau? (
-		!libav? ( >=media-video/ffmpeg-3.3:0 )
-		libav? ( >=media-video/libav-13:0 )
-		x11-libs/libvdpau
-	)
+	vdpau? ( x11-libs/libvdpau )
 	wayland? (
 		>=dev-libs/wayland-1.6.0
 		>=x11-libs/libxkbcommon-0.3.0
+		dev-libs/wayland-protocols
 	)
 	X? (
 		x11-libs/libX11
@@ -139,10 +132,9 @@ RDEPEND="${COMMON_DEPEND}
 	tools? ( ${PYTHON_DEPS} )
 "
 
-# PATCHES=(
-# 	"${FILESDIR}/${PN}-0.19.0-make-ffmpeg-version-check-non-fatal.patch"
-# 	"${FILESDIR}/${PN}-0.23.0-make-libavdevice-check-accept-libav.patch"
-# )
+PATCHES=(
+	"${FILESDIR}/${PN}-0.19.0-make-ffmpeg-version-check-non-fatal.patch"
+)
 
 pkg_setup() {
 	[[ ${MERGE_TYPE} != "binary" ]] && python_setup
@@ -156,8 +148,6 @@ src_prepare() {
 
 src_configure() {
 	tc-export CC PKG_CONFIG AR
-
-	append-cppflags -DLIBAVCODEC_MPV=1  # Circumvent Gentoo bug 635650 for now
 
 	if tc-is-cross-compiler && use raspberry-pi; then
 		export EXTRA_PKG_CONFIG_LIBDIR="${SYSROOT%/}${EPREFIX}/opt/vc/lib/pkgconfig"
@@ -225,6 +215,8 @@ src_configure() {
 		$(use_enable aqua cocoa)
 		$(use_enable drm)
 		$(use_enable gbm)
+		$(use_enable wayland wayland-scanner)
+		$(use_enable wayland wayland-protocols)
 		$(use_enable wayland)
 		$(use_enable X x11)
 		$(use_enable xv)
@@ -261,9 +253,6 @@ src_configure() {
 
 		# Miscellaneous features:
 		--disable-apple-remote	# Needs testing first. See Gentoo bug 577332.
-
-		# Allow usage of official FFmpeg releases
-		--enable-ffmpeg-upstream
 	)
 
 	if use vaapi && use X; then
