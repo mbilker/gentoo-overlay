@@ -5,6 +5,8 @@ EAPI=6
 
 RESTRICT="mirror test"
 
+inherit multilib multilib-minimal
+
 DESCRIPTION="FFmpeg version of headers required to interface with Nvidias codec APIs"
 HOMEPAGE="https://git.videolan.org/?p=ffmpeg/nv-codec-headers.git"
 
@@ -24,10 +26,18 @@ IUSE=""
 DEPEND=""
 RDEPEND=""
 
-src_compile() {
-	emake PREFIX="/usr"
+S="${WORKDIR}/${P}"
+
+src_prepare() {
+	default
+
+	multilib_copy_sources
 }
 
-src_install() {
-	emake PREFIX="/usr" DESTDIR="${D}" install
+multilib_src_compile() {
+	emake PREFIX="/usr" LIBDIR=$(get_libdir)
+}
+
+multilib_src_install() {
+	emake PREFIX="/usr" LIBDIR=$(get_libdir) DESTDIR="${D}" install
 }
