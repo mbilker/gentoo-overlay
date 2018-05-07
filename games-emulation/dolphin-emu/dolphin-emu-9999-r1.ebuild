@@ -1,9 +1,9 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
 
-PLOCALES="ar ca cs da_DK de el en es fa fr hr hu it ja ko ms_MY nb nl pl pt_BR pt ro_RO ru sr sv tr zh_CN zh_TW"
+PLOCALES="ar ca cs da de el en es fa fr hr hu it ja ko ms nb nl pl pt_BR pt ro ru sr sv tr zh_CN zh_TW"
 PLOCALE_BACKUP="en"
 WX_GTK_VER="3.0"
 
@@ -89,6 +89,7 @@ src_prepare() {
 	# - cpp-optparse: Their build set up makes this not conditional
 	# - glslang: Their build set up makes this not conditional
 	# - soundtouch: Their build set up makes this not conditional
+	# - picojson: For AutoUpdate
 	# - pugixml: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
 	# - portaudio: USE flag
@@ -99,6 +100,7 @@ src_prepare() {
 	mv Externals/SOIL . || die
 	mv Externals/glslang . || die
 	mv Externals/gtest . || die
+	mv Externals/picojson . || die
 	mv Externals/pugixml . || die
 	mv Externals/soundtouch . || die
 	mv Externals/xxhash . || die
@@ -119,6 +121,7 @@ src_prepare() {
 	mv SOIL Externals || die
 	mv glslang Externals || die
 	mv gtest Externals || die
+	mv picojson Externals || die
 	mv pugixml Externals || die
 	mv soundtouch Externals || die
 	mv xxhash Externals || die
