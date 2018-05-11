@@ -7,9 +7,9 @@ DISTUTILS_SINGLE_IMPL=1
 
 inherit distutils-r1 cmake-utils toolchain-funcs versionator git-r3
 
-DESCRIPTION="A fast and easy-to-use status bar"
-HOMEPAGE="https://github.com/jaagr/${PN}"
-EGIT_REPO_URI="https://github.com/jaagr/polybar"
+DESCRIPTION="A fast and easy-to-use tool for creating status bars"
+HOMEPAGE="https://github.com/jaagr/polybar"
+EGIT_REPO_URI="https://github.com/jaagr/${PN}.git"
 
 LICENSE="MIT"
 SLOT="0"
@@ -33,7 +33,7 @@ RDEPEND="media-libs/fontconfig
 	mpd? ( media-libs/libmpdclient )
 	network? ( net-wireless/wireless-tools )"
 DEPEND="${RDEPEND}
-	>=x11-proto/xcb-proto-1.12-r2"
+	>=x11-base/xcb-proto-1.12-r2"
 
 pkg_pretend() {
 	# A C++14 compliant compiler is required
