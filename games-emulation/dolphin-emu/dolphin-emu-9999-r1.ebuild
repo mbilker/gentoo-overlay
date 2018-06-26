@@ -82,7 +82,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	# Remove ALL the bundled libraries, aside from:
-	# - SOIL: The sources are not public.
+	# - discord-rpc: For Discord rich-presence
 	# - gtest: Their build set up solely relies on the build in gtest.
 	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
 	# - cubeb: Their build set up makes this not conditional
@@ -94,10 +94,10 @@ src_prepare() {
 	# - xxhash: Not on the tree.
 	# - portaudio: USE flag
 	# - wxWidgets3: 3.1 development version ebuild not available in Portage
+	mv Externals/discord-rpc . || die
 	mv Externals/Bochs_disasm . || die
 	mv Externals/cubeb . || die
 	mv Externals/cpp-optparse . || die
-	mv Externals/SOIL . || die
 	mv Externals/glslang . || die
 	mv Externals/gtest . || die
 	mv Externals/picojson . || die
@@ -115,10 +115,10 @@ src_prepare() {
 
 	rm -r Externals/* || die "Failed to delete Externals dir."
 
+	mv discord-rpc Externals || die
 	mv Bochs_disasm Externals || die
 	mv cubeb Externals || die
 	mv cpp-optparse Externals || die
-	mv SOIL Externals || die
 	mv glslang Externals || die
 	mv gtest Externals || die
 	mv picojson Externals || die
