@@ -3,7 +3,7 @@
 
 EAPI=5
 AUTOTOOLS_AUTORECONF=1
-inherit autotools-utils udev user
+inherit autotools-utils systemd udev user
 
 DESCRIPTION="USB multiplex daemon for use with Apple iPhone/iPod Touch devices"
 HOMEPAGE="http://www.libimobiledevice.org/"
@@ -29,5 +29,7 @@ pkg_setup() {
 }
 
 src_install() {
-	autotools-utils_src_install udevrulesdir="$(get_udevdir)"/rules.d
+	autotools-utils_src_install \
+		udevrulesdir="$(get_udevdir)"/rules.d \
+		systemdsystemunitdir="$(systemd_get_systemunitdir)"
 }
