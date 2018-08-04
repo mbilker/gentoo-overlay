@@ -93,7 +93,6 @@ src_prepare() {
 	# - pugixml: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
 	# - portaudio: USE flag
-	# - wxWidgets3: 3.1 development version ebuild not available in Portage
 	mv Externals/discord-rpc . || die
 	mv Externals/Bochs_disasm . || die
 	mv Externals/cubeb . || die
@@ -104,7 +103,6 @@ src_prepare() {
 	mv Externals/pugixml . || die
 	mv Externals/soundtouch . || die
 	mv Externals/xxhash . || die
-	mv Externals/wxWidgets3 . || die
 
 	if use !system-enet; then
 		mv Externals/enet . || die
@@ -125,7 +123,6 @@ src_prepare() {
 	mv pugixml Externals || die
 	mv soundtouch Externals || die
 	mv xxhash Externals || die
-	mv wxWidgets3 Externals || die
 
 	if use !system-enet; then
 		mv enet Externals || die
