@@ -1,13 +1,12 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=5
+EAPI=6
 
 PLOCALES="ar ca cs da de el en es fa fr hr hu it ja ko ms nb nl pl pt_BR pt ro ru sr sv tr zh_CN zh_TW"
 PLOCALE_BACKUP="en"
-WX_GTK_VER="3.0"
 
-inherit cmake-utils eutils l10n pax-utils toolchain-funcs versionator wxwidgets
+inherit cmake-utils eutils gnome2-utils l10n pax-utils toolchain-funcs
 
 if [[ ${PV} == 9999* ]]
 then
@@ -24,13 +23,14 @@ HOMEPAGE="https://www.dolphin-emu.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="alsa ao bluetooth doc egl +evdev ffmpeg llvm openal profile pulseaudio +qt5 sdl system-enet system-portaudio upnp +wxwidgets"
+IUSE="alsa bluetooth +discord doc egl +evdev ffmpeg llvm openal profile pulseaudio +qt5 sdl system-enet upnp"
 
 RDEPEND=">=media-libs/libsfml-2.1
 	system-enet? ( >net-libs/enet-1.3.7 )
 	>=net-libs/mbedtls-2.1.1
 	media-libs/glew:=
 	dev-libs/lzo
+	media-libs/libao
 	media-libs/libpng:=
 	sys-libs/glibc
 	sys-libs/readline:=
@@ -42,7 +42,6 @@ RDEPEND=">=media-libs/libsfml-2.1
 	virtual/libusb:1
 	virtual/opengl
 	alsa? ( media-libs/alsa-lib )
-	ao? ( media-libs/libao )
 	bluetooth? ( net-wireless/bluez )
 	egl? ( media-libs/mesa[egl] )
 	evdev? (
@@ -55,7 +54,6 @@ RDEPEND=">=media-libs/libsfml-2.1
 			media-libs/openal
 			media-libs/libsoundtouch
 	)
-	system-portaudio? ( media-libs/portaudio )
 	profile? ( dev-util/oprofile )
 	pulseaudio? ( media-sound/pulseaudio )
 	qt5? (
@@ -65,11 +63,6 @@ RDEPEND=">=media-libs/libsfml-2.1
 	)
 	sdl? ( media-libs/libsdl2[haptic,joystick] )
 	upnp? ( >=net-libs/miniupnpc-1.7 )
-	wxwidgets? (
-			dev-libs/glib:2
-			x11-libs/gtk+:2
-			x11-libs/wxGTK:${WX_GTK_VER}[opengl,X]
-	)
 	"
 DEPEND="${RDEPEND}
 	>=dev-util/cmake-2.8.8
@@ -82,7 +75,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	# Remove ALL the bundled libraries, aside from:
-	# - discord-rpc: For Discord rich-presence
+	# - discord-rpc: For Discord rich-presence, USE flag
 	# - gtest: Their build set up solely relies on the build in gtest.
 	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
 	# - cubeb: Their build set up makes this not conditional
@@ -92,43 +85,46 @@ src_prepare() {
 	# - picojson: For AutoUpdate
 	# - pugixml: Their build set up makes this not conditional
 	# - xxhash: Not on the tree.
-	# - portaudio: USE flag
-	mv Externals/discord-rpc . || die
 	mv Externals/Bochs_disasm . || die
 	mv Externals/cubeb . || die
 	mv Externals/cpp-optparse . || die
+	mv Externals/FreeSurround . || die
 	mv Externals/glslang . || die
 	mv Externals/gtest . || die
+	mv Externals/imgui . || die
+	mv Externals/minizip . || die
 	mv Externals/picojson . || die
 	mv Externals/pugixml . || die
 	mv Externals/soundtouch . || die
 	mv Externals/xxhash . || die
 
+	if use discord; then
+		mv Externals/discord-rpc . || die
+	fi
 	if use !system-enet; then
 		mv Externals/enet . || die
-	fi
-	if use !system-portaudio; then
-		mv Externals/portaudio . || die
 	fi
 
 	rm -r Externals/* || die "Failed to delete Externals dir."
 
-	mv discord-rpc Externals || die
 	mv Bochs_disasm Externals || die
 	mv cubeb Externals || die
 	mv cpp-optparse Externals || die
+	mv FreeSurround Externals || die
 	mv glslang Externals || die
 	mv gtest Externals || die
+	mv imgui Externals || die
+	mv minizip Externals || die
 	mv picojson Externals || die
 	mv pugixml Externals || die
 	mv soundtouch Externals || die
 	mv xxhash Externals || die
 
+	if use discord; then
+		mv discord-rpc Externals || die
+	fi
 	if use !system-enet; then
 		mv enet Externals || die
-	fi
-	if use !system-portaudio; then
-		mv portaudio Externals || die
 	fi
 
 	remove_locale() {
@@ -142,32 +138,29 @@ src_prepare() {
 
 	l10n_find_plocales_changes "Languages/po/" "" '.po'
 	l10n_for_each_disabled_locale_do remove_locale
+
+	eapply_user
+
+	cmake-utils_src_prepare
 }
 
 src_configure() {
-	if use wxwidgets; then
-		need-wxwidgets unicode
-	fi
-
 	# Configure cmake
 	local mycmakeargs=(
 		-DDISTRIBUTOR=Gentoo
-		$( cmake-utils_use ffmpeg ENCODE_FRAMEDUMPS )
-		$( cmake-utils_use profile OPROFILING )
-		$( cmake-utils_use_disable wxwidgets WX )
-		$( cmake-utils_use_enable alsa ALSA )
-		$( cmake-utils_use_enable ao AO )
-		$( cmake-utils_use_enable bluetooth BLUEZ )
-		$( cmake-utils_use_enable evdev EVDEV )
-		$( cmake-utils_use_enable llvm LLVM )
-		$( cmake-utils_use_enable openal OPENAL )
-		$( cmake-utils_use_enable pulseaudio PULSEAUDIO )
-		$( cmake-utils_use_enable qt5 QT2 )
-		$( cmake-utils_use_enable sdl SDL )
-		$(cmake-utils_use system-enet USE_SHARED_ENET)
-		$(cmake-utils_use system-portaudio SYSTEM_PORTAUDIO)
-		$( cmake-utils_use_use egl EGL )
-		$( cmake-utils_use_use upnp UPNP )
+		-DENABLE_ALSA="$(usex alsa)"
+		-DENABLE_BLUEZ="$(usex bluetooth)"
+		-DENABLE_EGL="$(usex egl)"
+		-DENABLE_EVDEV="$(usex evdev)"
+		-DENABLE_LLVM="$(usex llvm)"
+		-DENABLE_PULSEAUDIO="$(usex pulseaudio)"
+		-DENABLE_QT="$(usex qt5)"
+		-DENABLE_SDL="$(usex sdl)"
+		-DUSE_DISCORD_PRESENCE="$(usex discord)"
+		-DENCODE_FRAMEDUMPS="$(usex ffmpeg)"
+		-DOPROFILING="$(usex profile)"
+		-DUSE_SHARED_ENET="$(usex system-enet)"
+		-DUSE_UPNP="$(usex upnp)"
 	)
 
 	cmake-utils_src_configure
@@ -183,7 +176,7 @@ src_install() {
 
 	# set binary name
 	local binary="${PN}"
-	use wxwidgets || binary+="-nogui"
+	use qt5 || binary+="-nogui"
 
 	# install documentation as appropriate
 	cd "${S}"
@@ -192,7 +185,7 @@ src_install() {
 	fi
 
 	# create menu entry for GUI builds
-	if use wxwidgets; then
+	if use qt5; then
 		doicon -s 48 Data/dolphin-emu.png
 		doicon -s scalable Data/dolphin-emu.svg
 		doicon Data/dolphin-emu.svg
@@ -202,4 +195,10 @@ src_install() {
 pkg_postinst() {
 	# Add pax markings for hardened systems
 	pax-mark -m "${EPREFIX}"/usr/games/bin/"${PN}"
+
+	gnome2_icon_cache_update
+}
+
+pkg_postrm() {
+	gnome2_icon_cache_update
 }

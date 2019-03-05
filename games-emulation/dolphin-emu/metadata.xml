@@ -2,11 +2,11 @@
 <!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<use>
+		<flag name="discord">Enable Discord rich-presence support</flag>
 		<flag name="egl">Enable EGL support</flag>
 		<flag name="evdev">Enable evdev input support</flag>
 		<flag name="llvm">Enable the LLVM-based disassembler for debugger mode</flag>
 		<flag name="system-enet">Use system enet library</flag>
-		<flag name="system-portaudio">Use system portaudio library</flag>
 	</use>
 	<longdescription lang="en">
 Dolphin is a Gamecube and Wii emulator. Most games run perfectly or with minor
