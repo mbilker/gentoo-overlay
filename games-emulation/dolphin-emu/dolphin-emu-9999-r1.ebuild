@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -8,11 +8,10 @@ PLOCALE_BACKUP="en"
 
 inherit cmake-utils eutils gnome2-utils l10n pax-utils toolchain-funcs
 
-if [[ ${PV} == 9999* ]]
+if [[ ${PV} == *9999 ]]
 then
 	EGIT_REPO_URI="https://github.com/dolphin-emu/dolphin"
 	inherit git-r3
-	KEYWORDS=""
 else
 	SRC_URI="https://github.com/${PN}-emu/${PN}/archive/${PV}.zip -> ${P}.zip"
 	KEYWORDS="~amd64"
@@ -23,18 +22,21 @@ HOMEPAGE="https://www.dolphin-emu.org/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="alsa bluetooth +discord doc egl +evdev ffmpeg llvm openal profile pulseaudio +qt5 sdl system-enet upnp"
+IUSE="alsa bluetooth +discord doc +evdev ffmpeg llvm log lto profile pulseaudio +qt5 sdl upnp"
 
-RDEPEND=">=media-libs/libsfml-2.1
-	system-enet? ( >net-libs/enet-1.3.7 )
-	>=net-libs/mbedtls-2.1.1
-	media-libs/glew:=
+RDEPEND="
+	dev-libs/hidapi:0=
 	dev-libs/lzo
+	media-libs/glew:=
 	media-libs/libao
-	media-libs/libpng:=
+	media-libs/libpng:0=
+	media-libs/libsfml
+	media-libs/mesa[egl]
+	net-libs/enet:1.3
+	net-libs/mbedtls
 	sys-libs/glibc
-	sys-libs/readline:=
-	sys-libs/zlib
+	sys-libs/readline:0=
+	sys-libs/zlib:0=
 	x11-libs/libXext
 	x11-libs/libXi
 	x11-libs/libXrandr
@@ -43,17 +45,12 @@ RDEPEND=">=media-libs/libsfml-2.1
 	virtual/opengl
 	alsa? ( media-libs/alsa-lib )
 	bluetooth? ( net-wireless/bluez )
-	egl? ( media-libs/mesa[egl] )
 	evdev? (
 			dev-libs/libevdev
 			virtual/udev
 	)
 	ffmpeg? ( virtual/ffmpeg )
 	llvm? ( sys-devel/llvm:= )
-	openal? (
-			media-libs/openal
-			media-libs/libsoundtouch
-	)
 	profile? ( dev-util/oprofile )
 	pulseaudio? ( media-sound/pulseaudio )
 	qt5? (
@@ -63,69 +60,53 @@ RDEPEND=">=media-libs/libsfml-2.1
 	)
 	sdl? ( media-libs/libsdl2[haptic,joystick] )
 	upnp? ( >=net-libs/miniupnpc-1.7 )
-	"
+"
 DEPEND="${RDEPEND}
-	>=dev-util/cmake-2.8.8
-	>=sys-devel/gcc-5.4.0
 	app-arch/zip
+	dev-util/vulkan-headers
 	media-libs/freetype
 	sys-devel/gettext
-	virtual/pkgconfig
-	"
+	virtual/pkgconfig"
 
 src_prepare() {
-	# Remove ALL the bundled libraries, aside from:
-	# - discord-rpc: For Discord rich-presence, USE flag
-	# - gtest: Their build set up solely relies on the build in gtest.
-	# - Bochs-disasm: Some dissasembler from Bochs I guess for ARM dissassembly
-	# - cubeb: Their build set up makes this not conditional
-	# - cpp-optparse: Their build set up makes this not conditional
-	# - glslang: Their build set up makes this not conditional
-	# - soundtouch: Their build set up makes this not conditional
-	# - picojson: For AutoUpdate
-	# - pugixml: Their build set up makes this not conditional
-	# - xxhash: Not on the tree.
-	mv Externals/Bochs_disasm . || die
-	mv Externals/cubeb . || die
-	mv Externals/cpp-optparse . || die
-	mv Externals/FreeSurround . || die
-	mv Externals/glslang . || die
-	mv Externals/gtest . || die
-	mv Externals/imgui . || die
-	mv Externals/minizip . || die
-	mv Externals/picojson . || die
-	mv Externals/pugixml . || die
-	mv Externals/soundtouch . || die
-	mv Externals/xxhash . || die
+	cmake-utils_src_prepare
+
+	# Remove all the bundled libraries that support system-installed
+	# preference. See CMakeLists.txt for conditional 'add_subdirectory' calls.
+	local KEEP_SOURCES=(
+		Bochs_disasm
+		FreeSurround
+		cpp-optparse
+		# no support for using system library
+		fmt
+		glslang
+		imgui
+		minizip
+		# FIXME: xxhash cannot be found by cmake
+		xxhash
+		# soundtouch uses shorts, not floats
+		soundtouch
+		cubeb
+		# Their build setup solely relies on the build in gtest
+		gtest
+		# gentoo's version requies exception support.
+		# dolphin disables exceptions and fails the build.
+		picojson
+	)
 
 	if use discord; then
-		mv Externals/discord-rpc . || die
-	fi
-	if use !system-enet; then
-		mv Externals/enet . || die
+		KEEP_SOURCES+=(discord-rpc)
 	fi
 
+	local s
+	for s in "${KEEP_SOURCES[@]}"; do
+		mv -v "Externals/${s}" . || die
+	done
+	einfo "removing sources: $(echo Externals/*)"
 	rm -r Externals/* || die "Failed to delete Externals dir."
-
-	mv Bochs_disasm Externals || die
-	mv cubeb Externals || die
-	mv cpp-optparse Externals || die
-	mv FreeSurround Externals || die
-	mv glslang Externals || die
-	mv gtest Externals || die
-	mv imgui Externals || die
-	mv minizip Externals || die
-	mv picojson Externals || die
-	mv pugixml Externals || die
-	mv soundtouch Externals || die
-	mv xxhash Externals || die
-
-	if use discord; then
-		mv discord-rpc Externals || die
-	fi
-	if use !system-enet; then
-		mv enet Externals || die
-	fi
+	for s in "${KEEP_SOURCES[@]}"; do
+		mv -v "${s}" "Externals/" || die
+	done
 
 	remove_locale() {
 		# Ensure preservation of the backup locale when no valid LINGUA is set
@@ -140,34 +121,30 @@ src_prepare() {
 	l10n_for_each_disabled_locale_do remove_locale
 
 	eapply_user
-
-	cmake-utils_src_prepare
 }
 
 src_configure() {
-	# Configure cmake
 	local mycmakeargs=(
+		# Use ccache only when user did set FEATURES=ccache (or similar)
+		# not when ccache binary is present in system (automagic).
+		-DCCACHE_BIN=CCACHE_BIN-NOTFOUND
 		-DDISTRIBUTOR=Gentoo
 		-DENABLE_ALSA="$(usex alsa)"
 		-DENABLE_BLUEZ="$(usex bluetooth)"
-		-DENABLE_EGL="$(usex egl)"
 		-DENABLE_EVDEV="$(usex evdev)"
 		-DENABLE_LLVM="$(usex llvm)"
 		-DENABLE_PULSEAUDIO="$(usex pulseaudio)"
 		-DENABLE_QT="$(usex qt5)"
 		-DENABLE_SDL="$(usex sdl)"
-		-DUSE_DISCORD_PRESENCE="$(usex discord)"
 		-DENCODE_FRAMEDUMPS="$(usex ffmpeg)"
+		-DFASTLOG=$(usex log)
 		-DOPROFILING="$(usex profile)"
-		-DUSE_SHARED_ENET="$(usex system-enet)"
+		-DUSE_DISCORD_PRESENCE="$(usex discord)"
+		-DUSE_SHARED_ENET=ON
 		-DUSE_UPNP="$(usex upnp)"
 	)
 
 	cmake-utils_src_configure
-}
-
-src_compile() {
-	cmake-utils_src_compile
 }
 
 src_install() {
@@ -195,7 +172,6 @@ src_install() {
 pkg_postinst() {
 	# Add pax markings for hardened systems
 	pax-mark -m "${EPREFIX}"/usr/games/bin/"${PN}"
-
 	gnome2_icon_cache_update
 }
 
