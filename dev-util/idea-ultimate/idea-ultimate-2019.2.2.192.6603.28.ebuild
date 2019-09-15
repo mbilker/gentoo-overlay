@@ -18,8 +18,7 @@ LICENSE="IDEA
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 RESTRICT="mirror splitdebug"
-IUSE="custom-jdk +jbr8 -jbr11"
-REQUIRED_USE="jbr8? ( !jbr11 )"
+IUSE="+jbr"
 
 DEPEND="!dev-util/${PN}:14
 	!dev-util/${PN}:15"
@@ -33,17 +32,11 @@ QA_PREBUILT="opt/${PN}-${MY_PV}/*"
 src_prepare() {
 	default
 
-	if use amd64 ; then
-		JRE_DIR=jre64
-	else
-		JRE_DIR=jre
-	fi
-
-	if use arm ; then
+	if ! use arm ; then
 		rm -v bin/fsnotifier-arm || die
 	fi
-	if ! use custom-jdk ; then
-		rm -rv ${JRE_DIR} || die
+	if ! use jbr ; then
+		rm -rv jbr || die
 	fi
 }
 
@@ -54,22 +47,12 @@ src_install() {
 	doins -r *
 	fperms 755 "${dir}"/bin/{format.sh,idea.sh,inspect.sh,printenv.py,restart.py,fsnotifier{,64}}
 
-	if use amd64 ; then
-		JRE_DIR=jre64
-	else
-		JRE_DIR=jre
-	fi
+	if use jbr ; then
+		JRE_BINARIES="jaotc java javac jdb jjs jrunscript keytool pack200 rmid rmiregistry serialver unpack200"
 
-	if use jbr8 || use jbr11 ; then
-		if use jbr8 ; then
-			JRE_BINARIES="java jjs keytool orbd pack200 policytool rmid rmiregistry servertool tnameserv unpack200"
-		else
-			JRE_BINARIES="jaotc java javapackager jjs jrunscript keytool pack200 rmid rmiregistry unpack200"
-		fi
-
-		if [[ -d ${JRE_DIR} ]]; then
+		if [[ -d jbr ]]; then
 			for jrebin in $JRE_BINARIES; do
-				fperms 755 "${dir}/${JRE_DIR}/bin/${jrebin}"
+				fperms 755 "${dir}/jbr/bin/${jrebin}"
 			done
 		fi
 	fi
