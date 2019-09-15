@@ -35,6 +35,9 @@ src_prepare() {
 	if ! use arm ; then
 		rm -v bin/fsnotifier-arm || die
 	fi
+	if ! use ppc64 ; then
+		rm -rv lib/pty4j-native/linux/ppc64le || die
+	fi
 	if ! use jbr ; then
 		rm -rv jbr || die
 	fi
