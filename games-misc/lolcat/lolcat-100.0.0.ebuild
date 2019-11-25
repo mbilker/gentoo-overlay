@@ -17,6 +17,7 @@ HOMEPAGE="https://github.com/busyloop/lolcat"
 LICENSE="BSD"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
+RESTRICT="mirror"
 
 ruby_add_rdepend "
 	>=dev-ruby/trollop-2.1.2:2
