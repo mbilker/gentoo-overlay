@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -32,9 +32,6 @@ QA_PREBUILT="opt/${PN}-${MY_PV}/*"
 src_prepare() {
 	default
 
-	if ! use arm ; then
-		rm -v bin/fsnotifier-arm || die
-	fi
 	if ! use ppc64 ; then
 		rm -rv lib/pty4j-native/linux/ppc64le || die
 	fi
