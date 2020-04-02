@@ -32,6 +32,9 @@ QA_PREBUILT="opt/${PN}-${MY_PV}/*"
 src_prepare() {
 	default
 
+	rm -rv plugins/maven/lib/maven3/lib/jansi-native/freebsd32
+	rm -rv plugins/maven/lib/maven3/lib/jansi-native/freebsd64
+
 	if ! use ppc64 ; then
 		rm -rv lib/pty4j-native/linux/ppc64le || die
 	fi
