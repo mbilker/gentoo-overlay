@@ -1,12 +1,12 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 PLOCALES="ar ca cs da de el en es fa fr hr hu it ja ko ms nb nl pl pt_BR pt ro ru sr sv tr zh_CN zh_TW"
 PLOCALE_BACKUP="en"
 
-inherit cmake-utils eutils gnome2-utils l10n pax-utils toolchain-funcs
+inherit cmake eutils gnome2-utils l10n pax-utils toolchain-funcs
 
 if [[ ${PV} == *9999 ]]
 then
@@ -63,13 +63,12 @@ RDEPEND="
 "
 DEPEND="${RDEPEND}
 	app-arch/zip
-	dev-util/vulkan-headers
 	media-libs/freetype
 	sys-devel/gettext
 	virtual/pkgconfig"
 
 src_prepare() {
-	cmake-utils_src_prepare
+	cmake_src_prepare
 
 	# Remove all the bundled libraries that support system-installed
 	# preference. See CMakeLists.txt for conditional 'add_subdirectory' calls.
@@ -92,6 +91,8 @@ src_prepare() {
 		# gentoo's version requies exception support.
 		# dolphin disables exceptions and fails the build.
 		picojson
+		# dolphin uses an older version of the headers
+		Vulkan
 	)
 
 	if use discord; then
@@ -144,12 +145,12 @@ src_configure() {
 		-DUSE_UPNP="$(usex upnp)"
 	)
 
-	cmake-utils_src_configure
+	cmake_src_configure
 }
 
 src_install() {
 	# copy files to target installation directory
-	cmake-utils_src_install
+	cmake_src_install
 
 	# set binary name
 	local binary="${PN}"
