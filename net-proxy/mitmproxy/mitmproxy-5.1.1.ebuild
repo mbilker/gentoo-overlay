@@ -16,16 +16,18 @@ KEYWORDS="~amd64 ~x86"
 IUSE="test"
 
 RDEPEND="
+	>=app-arch/brotli-1.0.7[python,${PYTHON_USEDEP}]
 	>=dev-python/blinker-1.4[${PYTHON_USEDEP}]
-	>=dev-python/brotlipy-0.7.0[${PYTHON_USEDEP}]
 	>=dev-python/certifi-2019.11.28[${PYTHON_USEDEP}]
 	>=dev-python/click-7.0[${PYTHON_USEDEP}]
 	>=dev-python/cryptography-2.8[${PYTHON_USEDEP}]
+	>=dev-python/flask-1.1.2[${PYTHON_USEDEP}]
 	>=dev-python/hyper-h2-3.2.0[${PYTHON_USEDEP}]
 	>=dev-python/hyperframe-5.1.0[${PYTHON_USEDEP}]
 	>=dev-python/kaitaistruct-0.8[${PYTHON_USEDEP}]
 	>=dev-python/ldap3-2.6.1[${PYTHON_USEDEP}]
 	>=dev-python/passlib-1.6.5[${PYTHON_USEDEP}]
+	>=dev-python/publicsuffix-2.20191221[${PYTHON_USEDEP}]
 	>=dev-python/protobuf-python-3.6.0[${PYTHON_USEDEP}]
 	>=dev-python/pyasn1-0.3.1[${PYTHON_USEDEP}]
 	>=dev-python/pyopenssl-19.1.0[${PYTHON_USEDEP}]
@@ -37,6 +39,7 @@ RDEPEND="
 	>=www-servers/tornado-4.3[${PYTHON_USEDEP}]
 	>=dev-python/urwid-2.1.0[${PYTHON_USEDEP}]
 	>=dev-python/wsproto-0.14.0[${PYTHON_USEDEP}]
+	>=dev-python/zstandard-0.13.0[${PYTHON_USEDEP}]
 "
 
 DEPEND="${RDEPEND}
