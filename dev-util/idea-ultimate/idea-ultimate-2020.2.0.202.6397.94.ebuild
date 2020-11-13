@@ -5,8 +5,14 @@ EAPI=7
 
 inherit desktop eutils
 
-PV_STRING="$(ver_cut 3-5)"
-MY_PV="$(ver_cut 1-2)"
+PV_STRING="$(ver_cut 4-6)"
+
+if ver_test "$(ver_cut 3)" -eq 0; then
+	MY_PV="$(ver_cut 1-2)"
+else
+	MY_PV="$(ver_cut 1-3)"
+fi
+
 MY_PN="idea"
 
 DESCRIPTION="A complete toolset for web, mobile and enterprise development"
