@@ -29,6 +29,29 @@ RESTRICT="bindist mirror splitdebug"
 
 BDEPEND="dev-util/patchelf"
 
+# RDEPENDS may cause false positives in repoman.
+RDEPEND="
+	app-accessibility/at-spi2-atk
+	app-accessibility/at-spi2-core
+	dev-libs/atk
+	dev-libs/libdbusmenu
+	dev-libs/nss
+	media-libs/alsa-lib
+	media-libs/freetype
+	media-libs/mesa
+	net-print/cups
+	x11-libs/libXScrnSaver
+	x11-libs/libXcomposite
+	x11-libs/libXcursor
+	x11-libs/libXdamage
+	x11-libs/libXi
+	x11-libs/libXrandr
+	x11-libs/libXtst
+	x11-libs/libXxf86vm
+	x11-libs/libdrm
+	x11-libs/libxkbcommon
+	x11-libs/pango"
+
 S="${WORKDIR}/${MY_PN}-${PV_STRING}"
 
 QA_PREBUILT="opt/${PN}-${MY_PV}/*"
@@ -60,7 +83,7 @@ src_install() {
 
 	insinto "${dir}"
 	doins -r *
-	fperms 755 "${dir}"/bin/{format.sh,inspect.sh,phpstorm.sh,printenv.py,restart.py}
+	fperms 755 "${dir}"/bin/phpstorm.sh
 
 	if use amd64; then
 		fperms 755 "${dir}"/bin/fsnotifier64
