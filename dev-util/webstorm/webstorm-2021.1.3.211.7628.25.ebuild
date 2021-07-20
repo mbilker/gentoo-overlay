@@ -30,7 +30,6 @@ RESTRICT="bindist mirror splitdebug"
 BDEPEND="dev-util/patchelf"
 
 # RDEPENDS may cause false positives in repoman.
-# clion requires cmake and gdb at runtime to build and debug C/C++ projects
 RDEPEND="
 	app-accessibility/at-spi2-atk
 	app-accessibility/at-spi2-core
@@ -41,7 +40,6 @@ RDEPEND="
 	media-libs/freetype
 	media-libs/mesa
 	net-print/cups
-	sys-devel/gdb
 	x11-libs/libXScrnSaver
 	x11-libs/libXcomposite
 	x11-libs/libXcursor
