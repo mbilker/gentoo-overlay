@@ -61,12 +61,15 @@ src_prepare() {
 
 	local remove_me=(
 		lib/pty4j-native/linux/aarch64
+		lib/pty4j-native/linux/arm
 		lib/pty4j-native/linux/mips64el
 		lib/pty4j-native/linux/ppc64le
 	)
 
-	use amd64 || remove_me+=( bin/fsnotifier64 lib/pty4j-native/linux/x86_64)
-	use x86 || remove_me+=( bin/fsnotifier lib/pty4j-native/linux/x86)
+	use amd64 || remove_me+=(lib/pty4j-native/linux/x86_64)
+	use x86 || remove_me+=(lib/pty4j-native/linux/x86)
+
+	(use amd64 || use x86) || remove_me+=(bin/fsnotifier)
 
 	rm -rv "${remove_me[@]}" || die
 
@@ -85,14 +88,11 @@ src_install() {
 	doins -r *
 	fperms 755 "${dir}"/bin/webstorm.sh
 
-	if use amd64; then
-		fperms 755 "${dir}"/bin/fsnotifier64
+	if use amd64 || use x86; then
+		fperms 755 "${dir}"/bin/fsnotifier
 	fi
 	if use arm; then
 		fperms 755 "${dir}"/bin/fsnotifier-arm
-	fi
-	if use x86; then
-		fperms 755 "${dir}"/bin/fsnotifier
 	fi
 
 	if [[ -d jbr ]]; then
