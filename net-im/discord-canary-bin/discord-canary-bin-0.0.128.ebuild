@@ -1,37 +1,42 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 MY_PN=${PN/-bin/}
-inherit eutils gnome2-utils unpacker
+MY_BIN="DiscordCanary"
+
+inherit desktop linux-info pax-utils unpacker xdg
 
 DESCRIPTION="All-in-one voice and text chat for gamers"
 HOMEPAGE="https://discordapp.com"
 SRC_URI="https://dl-canary.discordapp.net/apps/linux/${PV}/${MY_PN}-${PV}.deb"
 
-LICENSE="no-source-code"
+LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE=""
+RESTRICT="mirror bindist"
 
 RDEPEND="
+	app-accessibility/at-spi2-atk:2
+	app-accessibility/at-spi2-core:2
 	dev-libs/atk
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/nspr
 	dev-libs/nss
-	gnome-base/gconf:2
 	media-libs/alsa-lib
 	media-libs/fontconfig:1.0
 	media-libs/freetype:2
 	net-print/cups
 	sys-apps/dbus
+	sys-apps/util-linux
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
-	x11-libs/gtk+:2
+	x11-libs/gtk+:3
 	x11-libs/libX11
 	x11-libs/libXScrnSaver
+	x11-libs/libxcb
 	x11-libs/libXcomposite
 	x11-libs/libXcursor
 	x11-libs/libXdamage
@@ -44,19 +49,23 @@ RDEPEND="
 	x11-libs/pango
 "
 
-S=${WORKDIR}
-
-RESTRICT="mirror"
+S="${WORKDIR}"
 
 QA_PREBUILT="
-	opt/discord-canary/share/discord-canary/DiscordCanary
-	opt/discord-canary/share/discord-canary/libnode.so
-	opt/discord-canary/share/discord-canary/libffmpeg.so
+	opt/discord-canary/${MY_BIN}
+	opt/discord-canary/chrome-sandbox
+	opt/discord-canary/libffmpeg.so
+	opt/discord-canary/libvk_swiftshader.so
+	opt/discord-canary/libvulkan.so
+	opt/discord-canary/libEGL.so
+	opt/discord-canary/libGLESv2.so
+	opt/discord-canary/libVkICD_mock_icd.so
+	opt/discord-canary/swiftshader/libEGL.so
+	opt/discord-canary/swiftshader/libGLESv2.so
+	opt/discord-canary/swiftshader/libvk_swiftshader.so
 "
 
-src_unpack() {
-	unpack_deb ${A}
-}
+CONFIG_CHECK="~USER_NS"
 
 src_prepare() {
 	default
@@ -64,28 +73,18 @@ src_prepare() {
 	sed -i \
 		-e "s:/usr/share/discord-canary/DiscordCanary:discord-canary:g" \
 		usr/share/${MY_PN}/${MY_PN}.desktop || die
+
+	mv usr/share/${MY_PN}/discord.png usr/share/${MY_PN}/${MY_PN}.png
 }
 
 src_install() {
+	doicon usr/share/${MY_PN}/${MY_PN}.png
+	domenu usr/share/${MY_PN}/${MY_PN}.desktop
+
 	insinto /opt/${MY_PN}
-	doins -r usr/.
+	doins -r usr/share/${MY_PN}/.
+	fperms +x /opt/${MY_PN}/${MY_BIN}
+	dosym ../../opt/${MY_PN}/${MY_BIN} usr/bin/${MY_PN}
 
-	fperms +x /opt/${MY_PN}/bin/${MY_PN}
-	dosym ../../opt/${MY_PN}/bin/${MY_PN} /usr/bin/${MY_PN}
-	dosym ../../../opt/${MY_PN}/share/applications/${MY_PN}.desktop \
-		/usr/share/applications/${MY_PN}.desktop
-	dosym ../../../opt/${MY_PN}/share/pixmaps/${MY_PN}.png \
-		/usr/share/pixmaps/${MY_PN}.png
-}
-
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
-pkg_postinst() {
-	gnome2_icon_cache_update
-}
-
-pkg_postrm() {
-	gnome2_icon_cache_update
+	pax-mark -m "${ED}"/opt/${MY_PN}/${MY_PN}
 }
