@@ -42,7 +42,7 @@
 # You need all files listed in the _ttf_ms_win10[_*] arrays.Place them in the
 # same directory as this PKGBUILD file, then run makepkg.
 
-EAPI=6
+EAPI=7
 
 inherit font
 
