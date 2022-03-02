@@ -62,7 +62,6 @@ REQUIRED_USE="
 RESTRICT="!test? ( test )"
 
 COMMON_DEPEND="
-	!!app-shells/mpv-bash-completion
 	>=media-video/ffmpeg-4.0:0=[encode,threads,vaapi?,vdpau?]
 	alsa? ( >=media-libs/alsa-lib-1.0.18 )
 	archive? ( >=app-arch/libarchive-3.4.0:= )
@@ -98,7 +97,7 @@ COMMON_DEPEND="
 	vapoursynth? ( media-libs/vapoursynth )
 	vdpau? ( x11-libs/libvdpau )
 	vulkan? (
-		>=media-libs/libplacebo-3.120.0:=[vulkan]
+		>=media-libs/libplacebo-4.192.1:=[vulkan]
 		media-libs/shaderc
 	)
 	wayland? (
