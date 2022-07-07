@@ -135,6 +135,7 @@ IUSE_LINUX_FIRMWARE=(
 	rtl_bt-8852ce-usb
 	rtw8822c
 	rtw8852a
+	rtw8852c
 	venus-52
 	venus-54
 	venus-vpu-2
@@ -228,6 +229,7 @@ LICENSE="
 	linux_firmware_rtl_bt-8852ce-usb? ( LICENCE.rtlwifi_firmware )
 	linux_firmware_rtw8822c? ( LICENCE.rtlwifi_firmware )
 	linux_firmware_rtw8852a? ( LICENCE.rtlwifi_firmware )
+	linux_firmware_rtw8852c? ( LICENCE.rtlwifi_firmware )
 	linux_firmware_venus-52? ( LICENSE.qcom )
 	linux_firmware_venus-54? ( LICENSE.qcom )
 	linux_firmware_venus-vpu-2? ( LICENSE.qcom )
@@ -340,7 +342,10 @@ install_iwlwifi() {
 			esac
 			;;
 		iwlwifi-so)
-			doins "${x}-a0-gf-a0-73.ucode"
+			case "${kernel}" in
+			kernel-upstream) doins "${x}-a0-gf-a0-72.ucode" ;;
+			*)               doins "${x}-a0-gf-a0-73.ucode" ;;
+			esac
 			doins "${x}-a0-gf-a0.pnvm"
 			;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
@@ -421,6 +426,7 @@ src_install() {
 	use_fw rtl_bt-8852ce-usb && doins_subdir rtl_bt/rtl8852cu*.bin
 	use_fw rtw8822c && doins_subdir rtw88/rtw8822c*.bin
 	use_fw rtw8852a && doins_subdir rtw89/rtw8852a*.bin
+	use_fw rtw8852c && doins_subdir rtw89/rtw8852c*.bin
 	use_fw venus-52 && doins_subdir qcom/venus-5.2/*
 	use_fw venus-54 && doins_subdir qcom/venus-5.4/*
 	use_fw venus-vpu-2 && doins_subdir qcom/vpu-2.0/*
