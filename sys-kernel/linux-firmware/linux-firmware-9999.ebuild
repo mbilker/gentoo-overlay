@@ -1,7 +1,7 @@
 # Copyright (c) 2013 The Chromium OS Authors. All rights reserved.
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI="7"
 
 inherit git-r3
 
@@ -145,7 +145,7 @@ IUSE_LINUX_FIRMWARE=(
 )
 IUSE="
 	${IUSE_KERNEL_VERS[*]}
-	${IUSE_LINUX_FIRMWARE[@]/#/linux_firmware_}
+	${IUSE_LINUX_FIRMWARE[*]/#/linux_firmware_}
 	video_cards_radeon
 	video_cards_amdgpu"
 REQUIRED_USE="?? ( ${IUSE_KERNEL_VERS[*]} )"
@@ -277,7 +277,7 @@ RESTRICT="binchecks strip"
 FIRMWARE_INSTALL_ROOT="/lib/firmware"
 
 use_fw() {
-	use linux_firmware_$1
+	use "linux_firmware_$1"
 }
 
 doins_subdir() {
@@ -323,7 +323,7 @@ install_iwlwifi() {
 		iwlwifi-9260)  doins "${x}-th-b0-jf-b0-46.ucode" ;;
 		iwlwifi-cc)
 			case "${kernel}" in
-			kernel-upstream) doins "${x}-a0-72.ucode" ;;
+			kernel-upstream) doins "${x}-a0-73.ucode" ;;
 			*)               doins "${x}-a0-73.ucode" ;;
 			esac
 			;;
@@ -333,7 +333,7 @@ install_iwlwifi() {
 			kernel-5_4)  doins "${x}-a0-hr-b0-73.ucode" ;;
 			kernel-5_10)  doins "${x}-a0-hr-b0-73.ucode" ;;
 			kernel-5_15)  doins "${x}-a0-hr-b0-73.ucode" ;;
-			kernel-upstream)  doins "${x}-a0-hr-b0-72.ucode" ;;
+			kernel-upstream)  doins "${x}-a0-hr-b0-73.ucode" ;;
 			*)
 				ewarn "Unexpected kernel version '${kernel}'."
 				ewarn "Installing all '${x}' files."
@@ -400,7 +400,7 @@ src_install() {
 	use_fw marvell-pcie8997 && doins_subdir mrvl/pcieusb8997_combo_v4.bin
 	use_fw mt7921e && doins_subdir mediatek/WIFI_{MT7961_patch_mcu_1_2_hdr,RAM_CODE_MT7961_1}.bin
 	use_fw mt7921e-bt && doins_subdir mediatek/BT_RAM_CODE_MT7961_1_2_hdr.bin
-	use_fw mt8173-vpu && doins vpu_{d,p}.bin
+	use_fw mt8173-vpu && doins_subdir mediatek/mt8173/vpu_{d,p}.bin
 	use_fw nvidia-xusb && doins_subdir nvidia/tegra*/xusb.bin
 	use_fw qca6174a-3-bt && doins_subdir qca/{nvm,rampatch}_0044*.bin
 	use_fw qca6174a-5-bt && doins_subdir qca/{nvm,rampatch}_usb_00000302*.bin
@@ -505,7 +505,7 @@ src_install() {
 	install_iwlwifi
 
 	for x in "${IUSE_BRCMWIFI[@]}"; do
-		use_fw ${x} || continue
+		use_fw "${x}" || continue
 		case ${x} in
 		brcmfmac-all)      doins_subdir brcm/brcmfmac* ;;
 		brcmfmac4354-sdio) doins_subdir brcm/brcmfmac4354-sdio.* ;;
