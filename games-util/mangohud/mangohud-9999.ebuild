@@ -40,10 +40,10 @@ REQUIRED_USE="
 BDEPEND="dev-python/mako[${PYTHON_USEDEP}]"
 
 DEPEND="
+	dev-libs/spdlog[${MULTILIB_USEDEP}]
 	dev-util/glslang
 	>=dev-util/vulkan-headers-1.2
 	media-libs/vulkan-loader[${MULTILIB_USEDEP}]
-	dev-libs/spdlog[${MULTILIB_USEDEP}]
 	media-libs/libglvnd[$MULTILIB_USEDEP]
 	dbus? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	X? ( x11-libs/libX11[${MULTILIB_USEDEP}] )
