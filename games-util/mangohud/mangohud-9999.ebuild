@@ -96,7 +96,7 @@ multilib_src_install() {
 }
 
 multilib_src_install_all() {
-	dodoc "${S}/bin/MangoHud.conf"
+	dodoc "${S}/data/MangoHud.conf"
 
 	einstalldocs
 }
