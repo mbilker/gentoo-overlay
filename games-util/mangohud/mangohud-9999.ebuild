@@ -40,9 +40,11 @@ REQUIRED_USE="
 BDEPEND="dev-python/mako[${PYTHON_USEDEP}]"
 
 DEPEND="
+	dev-cpp/nlohmann_json[${MULTILIB_USEDEP}]
 	dev-libs/spdlog[${MULTILIB_USEDEP}]
 	dev-util/glslang
 	>=dev-util/vulkan-headers-1.2
+	media-libs/glfw[${MULTILIB_USEDEP}]
 	media-libs/vulkan-loader[${MULTILIB_USEDEP}]
 	media-libs/libglvnd[$MULTILIB_USEDEP]
 	dbus? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
@@ -83,6 +85,9 @@ multilib_src_configure() {
 		-Dwith_x11=$(usex X enabled disabled)
 		-Dwith_wayland=$(usex wayland enabled disabled)
 		-Dwith_dbus=$(usex dbus enabled disabled)
+		-Dmangoapp=true
+		-Dmangohudctl=true
+		-Dmangoapp_layer=true
 	)
 	meson_src_configure
 }
