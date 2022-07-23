@@ -10,7 +10,7 @@ HOMEPAGE="https://github.com/OpenSC/OpenSC/wiki"
 
 if [[ ${PV} != *9999* ]]; then
 	SRC_URI="https://github.com/OpenSC/OpenSC/releases/download/${PV}/${P}.tar.gz"
-	KEYWORDS="~alpha amd64 arm ~hppa ~ia64 ~m68k ppc ppc64 ~s390 ~sparc x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~ppc ~ppc64 ~s390 ~sparc ~x86"
 else
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/OpenSC/OpenSC.git"
