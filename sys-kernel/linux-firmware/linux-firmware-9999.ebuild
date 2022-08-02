@@ -432,11 +432,8 @@ src_install() {
 	use_fw venus-vpu-2 && doins_subdir qcom/vpu-2.0/*
 	use video_cards_radeon && doins_subdir radeon/*
 
-	local ignore_legacy_amdgpu=0
-
 	if use_fw amdgpu_carrizo; then
 		doins_subdir amdgpu/carrizo*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_gc_10_3_7; then
@@ -445,48 +442,35 @@ src_install() {
 		doins_subdir amdgpu/psp_13_0_8_*
 		doins_subdir amdgpu/sdma_5_2_7*
 		doins_subdir amdgpu/yellow_carp_vcn.bin
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_green_sardine; then
 		doins_subdir amdgpu/green_sardine*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_picasso; then
 		doins_subdir amdgpu/picasso*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_raven2; then
 		doins_subdir amdgpu/raven_dmcu*
 		doins_subdir amdgpu/raven2*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_renoir; then
 		doins_subdir amdgpu/renoir*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_stoney; then
 		doins_subdir amdgpu/stoney*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_vega12; then
 		doins_subdir amdgpu/vega12*
-		ignore_legacy_amdgpu=1
 	fi
 
 	if use_fw amdgpu_yellow_carp; then
 		doins_subdir amdgpu/yellow_carp*
-		ignore_legacy_amdgpu=1
-	fi
-
-	# This use flag is deprecated and being removed
-	if [[ "${ignore_legacy_amdgpu}" -eq 0 ]] && use video_cards_amdgpu; then
-		doins_subdir amdgpu/{carrizo,picasso,raven_dmcu,raven2,stoney,vega12}*
 	fi
 
 	use_fw rt2870 && doins rt2870.bin
