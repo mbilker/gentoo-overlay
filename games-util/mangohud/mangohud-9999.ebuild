@@ -44,6 +44,7 @@ DEPEND="
 	dev-libs/spdlog[${MULTILIB_USEDEP}]
 	dev-util/glslang
 	>=dev-util/vulkan-headers-1.2
+	media-libs/glew[${MULTILIB_USEDEP}]
 	media-libs/glfw[${MULTILIB_USEDEP}]
 	media-libs/vulkan-loader[${MULTILIB_USEDEP}]
 	media-libs/libglvnd[$MULTILIB_USEDEP]
