@@ -13,8 +13,6 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gabime/${PN}"
 else
 	SRC_URI="https://github.com/gabime/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	# Temporary for bug #811750
-	SRC_URI+=" test? ( https://dev.gentoo.org/~sam/distfiles/${CATEGORY}/${PN}/${P}-update-catch-glibc-2.34.patch.bz2 )"
 	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
 fi
 
@@ -33,12 +31,10 @@ RDEPEND="${DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-force_external_fmt.patch"
-	"${FILESDIR}/${P}-fix-clone-test.patch"
+	"${FILESDIR}/${PN}-1.9.2-fix-clone-test.patch"
 )
 
 src_prepare() {
-	use test && eapply "${WORKDIR}"/${P}-update-catch-glibc-2.34.patch
-
 	cmake_src_prepare
 	rm -r include/spdlog/fmt/bundled || die "Failed to delete bundled libfmt"
 }
