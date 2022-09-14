@@ -1,0 +1,14 @@
+BDEPEND=X? ( >=x11-apps/mkfontscale-1.2.0 media-fonts/encodings )
+DEFINED_PHASES=install postinst postrm setup
+DESCRIPTION=Microsoft Windows 10 TrueType fonts
+EAPI=7
+HOMEPAGE=http://www.microsoft.com/typography/fonts/product.aspx?PID=164
+INHERIT=font
+IUSE=X
+KEYWORDS=~amd64 ~x86
+LICENSE=MicrosoftEULA
+RESTRICT=fetch
+SLOT=0
+SRC_URI=microsoft-fonts-10.15063.tar.bz2
+_eclasses_=font	d31f12a0f6e13d56dc3062e76ae58a61
+_md5_=b2f0c678477bee3b80f33125866bc7e9

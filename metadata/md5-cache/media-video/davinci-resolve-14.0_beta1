@@ -1,0 +1,12 @@
+DEFINED_PHASES=install nofetch prepare unpack
+DESCRIPTION=Professional A/V post-production software suite
+EAPI=6
+HOMEPAGE=https://www.blackmagicdesign.com/
+INHERIT=unpacker versionator
+KEYWORDS=~amd64
+LICENSE=DavinciResolve
+RESTRICT=fetch mirror strip
+SLOT=0
+SRC_URI=https://www.blackmagicdesign.com/products/davinciresolve/DaVinci_Resolve_14.0b1_Linux.zip
+_eclasses_=toolchain-funcs	1542e649be915f43f6908a9e93909961	multilib	5ca4e49abed8e3a2f7b56920eadee157	unpacker	697382d119fd3d195f110b7979184285	estack	055c42df72f76a4f45ec92b35e83cd56	versionator	d3fb3ba33acc3bbbdc4d7970227c100d
+_md5_=4d3850753c0ba5cbaecdd40ad673b5c7
