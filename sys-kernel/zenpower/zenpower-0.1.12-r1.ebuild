@@ -18,7 +18,16 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 BDEPEND=""
 
+PATCHES="${FILESDIR}/zenpower-0.1.12-use-symlink-to-detect-kernel-version.patch"
+
 CONFIG_CHECK="HWMON PCI AMD_NB"
 
 BUILD_TARGETS="modules"
 MODULE_NAMES="zenpower(kernel/drivers/hwmon:${S})"
+
+src_compile() {
+	# Used by the patch to ensure the correct source directory is used
+	export KV_FULL
+
+	linux-mod_src_compile
+}
