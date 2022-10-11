@@ -6,13 +6,13 @@ EAPI=8
 inherit toolchain-funcs
 
 # This is the name of the latest release branch.
-RELEASE="release-R105-14989.B"
-# This is the latest commit in the release-R80-12739.B branch.
+#RELEASE="release-R105-14989.B"
+# This is the latest commit in the release-R105-14989.B branch.
 GIT_SHA1="a975eed306e16947c30b48ccd25ab67a37295742"
 
 DESCRIPTION="Chrome OS verified boot tools"
 HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/vboot_reference/ https://dev.chromium.org/chromium-os/chromiumos-design-docs/verified-boot"
-SRC_URI="https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+archive/refs/heads/${RELEASE}.tar.gz -> ${P}.tar.gz"
+#SRC_URI="https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+archive/refs/heads/${RELEASE}.tar.gz -> ${P}.tar.gz"
 SRC_URI="https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+archive/${GIT_SHA1}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="BSD"

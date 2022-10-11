@@ -11,5 +11,5 @@ LICENSE=BSD
 RDEPEND=!static? ( elibc_musl? ( sys-libs/fts-standalone:= ) dev-libs/openssl:0= libzip? ( dev-libs/libzip:= ) sys-apps/util-linux:= !minimal? ( dev-libs/libyaml:= app-arch/xz-utils:= ) )
 SLOT=0
 SRC_URI=https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+archive/a975eed306e16947c30b48ccd25ab67a37295742.tar.gz -> vboot-utils-105_p20220715.tar.gz
-_eclasses_=toolchain-funcs	1542e649be915f43f6908a9e93909961	multilib	5ca4e49abed8e3a2f7b56920eadee157
-_md5_=687364ef5b1d349c4e69056a4df626d6
+_eclasses_=toolchain-funcs	441f754fd75cd4fd1fa06fbc17da6144	multilib	5ca4e49abed8e3a2f7b56920eadee157
+_md5_=b1d0534543858ff358114020107070cd
