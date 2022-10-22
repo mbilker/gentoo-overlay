@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit desktop wrapper
 
@@ -31,26 +31,36 @@ BDEPEND="dev-util/patchelf"
 
 # RDEPENDS may cause false positives in repoman.
 RDEPEND="
-	app-accessibility/at-spi2-atk
-	app-accessibility/at-spi2-core
-	dev-libs/atk
-	dev-libs/libdbusmenu
+	|| (
+		>=app-accessibility/at-spi2-core-2.46.0:2
+		( app-accessibility/at-spi2-atk dev-libs/atk )
+	)
+	dev-libs/expat
+	dev-libs/glib:2
+	dev-libs/nspr
 	dev-libs/nss
 	media-libs/alsa-lib
-	media-libs/freetype
+	media-libs/freetype:2
 	media-libs/mesa
 	net-print/cups
-	x11-libs/libXScrnSaver
+	sys-apps/dbus
+	x11-libs/cairo
+	x11-libs/pango
+	sys-libs/zlib
+	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXcursor
 	x11-libs/libXdamage
+	x11-libs/libXext
+	x11-libs/libXfixes
 	x11-libs/libXi
 	x11-libs/libXrandr
+	x11-libs/libXrender
 	x11-libs/libXtst
 	x11-libs/libXxf86vm
 	x11-libs/libdrm
-	x11-libs/libxkbcommon
-	x11-libs/pango"
+	x11-libs/libxcb
+	x11-libs/libxkbcommon"
 
 S="${WORKDIR}/${MY_PN}-${PV_STRING}"
 
@@ -64,12 +74,12 @@ src_prepare() {
 		lib/pty4j-native/linux/arm
 		lib/pty4j-native/linux/mips64el
 		lib/pty4j-native/linux/ppc64le
+		plugins/remote-dev-server/selfcontained
+		plugins/cwm-plugin/quiche-native/linux-aarch64
 	)
 
-	use amd64 || remove_me+=(lib/pty4j-native/linux/x86_64)
-	use x86 || remove_me+=(lib/pty4j-native/linux/x86)
-
-	(use amd64 || use x86) || remove_me+=(bin/fsnotifier)
+	use amd64 || remove_me+=( lib/pty4j-native/linux/x86_64 )
+	use x86 || remove_me+=( lib/pty4j-native/linux/x86 )
 
 	rm -rv "${remove_me[@]}" || die
 
@@ -86,17 +96,10 @@ src_install() {
 
 	insinto "${dir}"
 	doins -r *
-	fperms 755 "${dir}"/bin/webstorm.sh
-
-	if use amd64 || use x86; then
-		fperms 755 "${dir}"/bin/fsnotifier
-	fi
-	if use arm; then
-		fperms 755 "${dir}"/bin/fsnotifier-arm
-	fi
+	fperms 755 "${dir}"/bin/{webstorm.sh,fsnotifier,inspect.sh,ltedit.sh,repair}
 
 	if [[ -d jbr ]]; then
-		fperms 755 "${dir}"/jbr/bin/{jaotc,java,javac,jdb,jjs,jrunscript,keytool,pack200,rmid,rmiregistry,serialver,unpack200}
+		fperms 755 "${dir}"/jbr/bin/{java,javac,jdb,jrunscript,keytool,rmiregistry,serialver}
 		# Fix #763582
 		fperms 755 "${dir}"/jbr/lib/{chrome-sandbox,jcef_helper,jexec,jspawnhelper}
 	fi
