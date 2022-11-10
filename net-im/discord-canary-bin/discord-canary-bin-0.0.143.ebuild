@@ -3,8 +3,8 @@
 
 EAPI=8
 
-MY_PN="${PN/-bin}"
-MY_PV="${PV/-r*}"
+MY_PN="${PN/-bin/}"
+MY_PV="${PV/-r*/}"
 MY_BIN="DiscordCanary"
 
 CHROMIUM_LANGS="
@@ -22,23 +22,28 @@ SRC_URI="https://dl-canary.discordapp.net/apps/linux/${MY_PV}/${MY_PN}-${MY_PV}.
 LICENSE="all-rights-reserved"
 SLOT="0"
 KEYWORDS="~amd64"
+RESTRICT="bindist mirror strip test"
+IUSE="+seccomp system-ffmpeg"
 
-# libXScrnSaver is used through dlopen (bug #825370)
 RDEPEND="
-	|| (
-		>=app-accessibility/at-spi2-core-2.46.0:2
-		( app-accessibility/at-spi2-atk dev-libs/atk )
-	)
+		|| (
+			>=app-accessibility/at-spi2-core-2.46.0:2
+			( app-accessibility/at-spi2-atk dev-libs/atk )
+		)
+	app-crypt/libsecret
 	dev-libs/expat
 	dev-libs/glib:2
 	dev-libs/nspr
 	dev-libs/nss
 	media-libs/alsa-lib
+	media-libs/fontconfig
 	media-libs/mesa[gbm(+)]
 	net-print/cups
 	sys-apps/dbus
+	sys-apps/util-linux
 	sys-libs/glibc
 	x11-libs/cairo
+	x11-libs/libdrm
 	x11-libs/gdk-pixbuf:2
 	x11-libs/gtk+:3
 	x11-libs/libX11
@@ -48,14 +53,12 @@ RDEPEND="
 	x11-libs/libXext
 	x11-libs/libXfixes
 	x11-libs/libXrandr
-	x11-libs/libdrm
 	x11-libs/libxcb
 	x11-libs/libxkbcommon
 	x11-libs/libxshmfence
 	x11-libs/pango
+	system-ffmpeg? ( media-video/ffmpeg[chromium] )
 "
-
-RESTRICT="bindist mirror strip test"
 
 DESTDIR="/opt/${MY_PN}"
 
@@ -77,18 +80,13 @@ CONFIG_CHECK="~USER_NS"
 
 S="${WORKDIR}/${MY_BIN}"
 
-pkg_pretend() {
-	chromium_suid_sandbox_check_kernel_config
-}
-
 src_unpack() {
 	unpack ${MY_PN}-${MY_PV}.tar.gz
 }
 
 src_configure() {
-	chromium_suid_sandbox_check_kernel_config
-
 	default
+	chromium_suid_sandbox_check_kernel_config
 }
 
 src_prepare() {
@@ -96,21 +94,41 @@ src_prepare() {
 	# remove post-install script
 	rm postinst.sh || die "the removal of the unneeded post-install script failed"
 	# cleanup languages
-	pushd "locales/" || die "location change for language cleanup failed"
+	pushd "locales/" >/dev/null || die "location change for language cleanup failed"
 	chromium_remove_language_paks
-	popd || die "location reset for language cleanup failed"
+	popd >/dev/null || die "location reset for language cleanup failed"
 	# fix .desktop exec location
-	sed -i -e "s:/usr/share/discord-canary/DiscordCanary:${DESTDIR}/${MY_BIN}:" ${MY_PN}.desktop || die "fixing of exec location on .desktop failed"
+	sed -i "/Exec/s:/usr/share/discord-canary/DiscordCanary:${DESTDIR}/${MY_BIN}:" \
+		"${MY_PN}.desktop" ||
+		die "fixing of exec location on .desktop failed"
+	# USE seccomp
+	if ! use seccomp; then
+		sed -i '/Exec/s/DiscordCanary/DiscordCanary --disable-seccomp-filter-sandbox/' \
+			"${MY_PN}.desktop" ||
+			die "sed failed for seccomp"
+	fi
+	# USE system-ffmpeg
+	if use system-ffmpeg; then
+		rm libffmpeg.so || die
+		elog "Using system ffmpeg. This is experimental and may lead to crashes."
+	fi
 }
 
 src_install() {
 	doicon -s 256 discord.png
 
 	# install .desktop file
-	domenu ${MY_PN}.desktop
+	domenu "${MY_PN}.desktop"
 
 	exeinto "${DESTDIR}"
-	doexe ${MY_BIN} chrome-sandbox libEGL.so libffmpeg.so libGLESv2.so libvk_swiftshader.so
+
+	doexe "${MY_BIN}" chrome-sandbox libEGL.so libGLESv2.so libvk_swiftshader.so
+
+	if use system-ffmpeg; then
+		dosym "../../usr/$(get_libdir)/chromium/libffmpeg.so" "${DESTDIR}/libffmpeg.so" || die
+	else
+		doexe libffmpeg.so
+	fi
 
 	insinto "${DESTDIR}"
 	doins chrome_100_percent.pak chrome_200_percent.pak icudtl.dat resources.pak snapshot_blob.bin v8_context_snapshot.bin
@@ -119,9 +137,10 @@ src_install() {
 
 	# Chrome-sandbox requires the setuid bit to be specifically set.
 	# see https://github.com/electron/electron/issues/17972
-	fperms 4755 "${DESTDIR}"/chrome-sandbox
+	fowners root "${DESTDIR}/chrome-sandbox"
+	fperms 4711 "${DESTDIR}/chrome-sandbox"
 
-	dosym "${DESTDIR}"/${MY_BIN} /usr/bin/${MY_PN}
+	dosym "${DESTDIR}/${MY_BIN}" "/usr/bin/${MY_PN}"
 }
 
 pkg_postinst() {
