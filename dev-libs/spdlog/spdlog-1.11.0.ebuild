@@ -1,11 +1,11 @@
-# Copyright 1999-2022 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
 inherit cmake multilib-minimal
 
-DESCRIPTION="Very fast, header only, C++ logging library"
+DESCRIPTION="Fast C++ logging library"
 HOMEPAGE="https://github.com/gabime/spdlog"
 
 if [[ ${PV} == *9999 ]]; then
@@ -13,7 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/gabime/${PN}"
 else
 	SRC_URI="https://github.com/gabime/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~x86"
+	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv ~x86"
 fi
 
 LICENSE="MIT"
@@ -31,7 +31,6 @@ RDEPEND="${DEPEND}"
 
 PATCHES=(
 	"${FILESDIR}/${PN}-force_external_fmt.patch"
-	"${FILESDIR}/${PN}-1.9.2-fix-clone-test.patch"
 )
 
 src_prepare() {
