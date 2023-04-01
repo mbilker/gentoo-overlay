@@ -51,6 +51,7 @@ IUSE_IWLWIFI=(
 	iwlwifi-cc
 	iwlwifi-QuZ
 	iwlwifi-so
+	iwlwifi-so-a0-hr
 )
 IUSE_BRCMWIFI=(
 	brcmfmac-all
@@ -98,6 +99,7 @@ IUSE_LINUX_FIRMWARE=(
 	ibt_9560
 	ibt_ax200
 	ibt_ax201
+	ibt_ax203
 	ibt_ax211
 	ibt-hw
 	ice
@@ -108,6 +110,8 @@ IUSE_LINUX_FIRMWARE=(
 	marvell-pcie8997
 	mt7921e
 	mt7921e-bt
+	mt7922
+	mt7922-bt
 	mt8173-vpu
 	nvidia-xusb
 	qca6174a-3-bt
@@ -193,6 +197,7 @@ LICENSE="
 	linux_firmware_ibt_9560? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax200? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax201? ( LICENCE.ibt_firmware )
+	linux_firmware_ibt_ax203? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax211? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt-hw? ( LICENCE.ibt_firmware )
 	linux_firmware_ice? ( LICENSE.ice )
@@ -202,6 +207,8 @@ LICENSE="
 	linux_firmware_marvell-pcie8997? ( LICENCE.NXP )
 	linux_firmware_mt7921e? ( LICENCE.mediatek-nic )
 	linux_firmware_mt7921e-bt? ( LICENCE.mediatek-nic )
+	linux_firmware_mt7922? ( LICENCE.mediatek-nic )
+	linux_firmware_mt7922-bt? ( LICENCE.mediatek-nic )
 	linux_firmware_mt8173-vpu? ( LICENCE.mediatek-vpu )
 	linux_firmware_nvidia-xusb? ( LICENCE.nvidia )
 	linux_firmware_qca6174a-3-bt? ( LICENSE.QualcommAtheros_ath10k )
@@ -349,8 +356,13 @@ install_iwlwifi() {
 			*)               doins "${x}-a0-gf-a0-79.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm" ;;
+		iwlwifi-so-a0-hr) doins "${x}-b0-79.ucode" ;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
 		esac
+		# At least with EAPI 7, it's ok to call 'doins' with the same
+		# file multiple times. So an overlay declaring multiple
+		# 'iwlwifi-*' USE flags (e.g. volteer) won't break the build.
+		doins "iwl-dbg-cfg.ini"
 	done
 }
 
@@ -388,6 +400,7 @@ src_install() {
 	use_fw ibt_9560 && doins_subdir intel/ibt-17-16-1.*
 	use_fw ibt_ax200 && doins_subdir intel/ibt-20-*.*
 	use_fw ibt_ax201 && doins_subdir intel/ibt-19-*.*
+	use_fw ibt_ax203 && doins_subdir intel/ibt-0040-4150.*
 	use_fw ibt_ax211 && doins_subdir intel/ibt-0040-0041.*
 	use_fw ibt-hw && doins_subdir intel/ibt-hw-*.bseq
 	use_fw ice && doins_subdir intel/ice/ddp/*
@@ -397,6 +410,8 @@ src_install() {
 	use_fw marvell-pcie8997 && doins_subdir mrvl/pcieusb8997_combo_v4.bin
 	use_fw mt7921e && doins_subdir mediatek/WIFI_{MT7961_patch_mcu_1_2_hdr,RAM_CODE_MT7961_1}.bin
 	use_fw mt7921e-bt && doins_subdir mediatek/BT_RAM_CODE_MT7961_1_2_hdr.bin
+	use_fw mt7922 && doins_subdir mediatek/WIFI_{MT7922_patch_mcu_1_1_hdr,RAM_CODE_MT7922_1}.bin
+	use_fw mt7922-bt && doins_subdir mediatek/BT_RAM_CODE_MT7922_1_1_hdr.bin
 	use_fw mt8173-vpu && doins_subdir mediatek/mt8173/vpu_{d,p}.bin
 	use_fw nvidia-xusb && doins_subdir nvidia/tegra*/xusb.bin
 	use_fw qca6174a-3-bt && doins_subdir qca/{nvm,rampatch}_0044*.bin
