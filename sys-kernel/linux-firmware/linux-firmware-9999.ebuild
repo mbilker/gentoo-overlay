@@ -75,11 +75,15 @@ IUSE_LINUX_FIRMWARE=(
 	ath11k_wcn6855
 	amd_ucode
 	amdgpu_carrizo
+	amdgpu_dimgrey_cavefish
 	amdgpu_gc_10_3_7
+	amdgpu_gc_11_0_1
 	amdgpu_green_sardine
+	amdgpu_navy_flounder
 	amdgpu_picasso
 	amdgpu_raven2
 	amdgpu_renoir
+	amdgpu_sienna_cichlid
 	amdgpu_stoney
 	amdgpu_vega12
 	amdgpu_yellow_carp
@@ -163,11 +167,15 @@ LICENSE="
 	linux_firmware_adsp_skl? ( LICENCE.adsp_sst )
 	linux_firmware_amd_ucode? ( LICENSE.amd-ucode )
 	linux_firmware_amdgpu_carrizo? ( LICENSE.amdgpu )
+	linux_firmware_amdgpu_dimgrey_cavefish? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_gc_10_3_7? ( LICENSE.amdgpu )
+	linux_firmware_amdgpu_gc_11_0_1? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_green_sardine? ( LICENSE.amdgpu )
+	linux_firmware_amdgpu_navy_flounder? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_picasso? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_raven2? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_renoir? ( LICENSE.amdgpu )
+	linux_firmware_amdgpu_sienna_cichlid? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_stoney? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_vega12? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_yellow_carp? ( LICENSE.amdgpu )
@@ -331,7 +339,7 @@ install_iwlwifi() {
 		iwlwifi-cc)
 			case "${kernel}" in
 			kernel-5_15)     doins "${x}-a0-77.ucode" ;;
-			kernel-upstream) doins "${x}-a0-72.ucode" ;;
+			kernel-upstream) doins "${x}-a0-74.ucode" ;;
 			*)               doins "${x}-a0-77.ucode" ;;
 			esac
 			;;
@@ -341,7 +349,7 @@ install_iwlwifi() {
 			kernel-5_4)  doins "${x}-a0-hr-b0-77.ucode" ;;
 			kernel-5_10) doins "${x}-a0-hr-b0-77.ucode" ;;
 			kernel-5_15) doins "${x}-a0-hr-b0-77.ucode" ;;
-			kernel-upstream)  doins "${x}-a0-hr-b0-72.ucode" ;;
+			kernel-upstream)  doins "${x}-a0-hr-b0-74.ucode" ;;
 			*)
 				ewarn "Unexpected kernel version '${kernel}'."
 				ewarn "Installing all '${x}' files."
@@ -351,18 +359,19 @@ install_iwlwifi() {
 			;;
 		iwlwifi-so)
 			case "${kernel}" in
-			kernel-5_15)     doins "${x}-a0-gf-a0-79.ucode" ;;
-			kernel-upstream) doins "${x}-a0-gf-a0-72.ucode" ;;
-			*)               doins "${x}-a0-gf-a0-79.ucode" ;;
+			kernel-5_15)     doins "${x}-a0-gf-a0-81.ucode" ;;
+			kernel-upstream) doins "${x}-a0-gf-a0-74.ucode" ;;
+			*)               doins "${x}-a0-gf-a0-81.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm" ;;
-		iwlwifi-so-a0-hr) doins "${x}-b0-79.ucode" ;;
+		iwlwifi-so-a0-hr)
+			case "${kernel}" in
+			kernel-upstream) doins "${x}-b0-74.ucode" ;;
+			*)               doins "${x}-b0-81.ucode" ;;
+			esac
+			;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
 		esac
-		# At least with EAPI 7, it's ok to call 'doins' with the same
-		# file multiple times. So an overlay declaring multiple
-		# 'iwlwifi-*' USE flags (e.g. volteer) won't break the build.
-		doins "iwl-dbg-cfg.ini"
 	done
 }
 
@@ -448,6 +457,10 @@ src_install() {
 		doins_subdir amdgpu/carrizo*
 	fi
 
+	if use_fw amdgpu_dimgrey_cavefish; then
+		doins_subdir amdgpu/dimgrey_cavefish*
+	fi
+
 	if use_fw amdgpu_gc_10_3_7; then
 		doins_subdir amdgpu/dcn_3_1_6*
 		doins_subdir amdgpu/gc_10_3_7_*
@@ -456,8 +469,20 @@ src_install() {
 		doins_subdir amdgpu/yellow_carp_vcn.bin
 	fi
 
+	if use_fw amdgpu_gc_11_0_1; then
+		doins_subdir amdgpu/dcn_3_1_4*
+		doins_subdir amdgpu/gc_11_0_1_*
+		doins_subdir amdgpu/psp_13_0_4_*
+		doins_subdir amdgpu/sdma_6_0_1*
+		doins_subdir amdgpu/vcn_4_0_2.bin
+	fi
+
 	if use_fw amdgpu_green_sardine; then
 		doins_subdir amdgpu/green_sardine*
+	fi
+
+	if use_fw amdgpu_navy_flounder; then
+		doins_subdir amdgpu/navy_flounder*
 	fi
 
 	if use_fw amdgpu_picasso; then
@@ -471,6 +496,10 @@ src_install() {
 
 	if use_fw amdgpu_renoir; then
 		doins_subdir amdgpu/renoir*
+	fi
+
+	if use_fw amdgpu_sienna_cichlid; then
+		doins_subdir amdgpu/sienna_cichlid*
 	fi
 
 	if use_fw amdgpu_stoney; then
