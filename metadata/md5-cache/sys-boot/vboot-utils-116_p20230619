@@ -1,15 +1,15 @@
-BDEPEND=virtual/pkgconfig
-DEFINED_PHASES=compile install prepare test
+BDEPEND=virtual/pkgconfig >=dev-vcs/git-1.8.2.1[curl]
+DEFINED_PHASES=compile install prepare test unpack
 DEPEND=!static? ( elibc_musl? ( sys-libs/fts-standalone:= ) dev-libs/openssl:0= libzip? ( dev-libs/libzip:= ) sys-apps/util-linux:= !minimal? ( dev-libs/libyaml:= app-arch/xz-utils:= ) ) static? ( elibc_musl? ( sys-libs/fts-standalone:=[static-libs(+)] ) dev-libs/openssl:0=[static-libs(+)] libzip? ( dev-libs/libzip:=[static-libs(+)] ) sys-apps/util-linux:=[static-libs(+)] !minimal? ( dev-libs/libyaml:=[static-libs(+)] app-arch/xz-utils:=[static-libs(+)] ) ) app-crypt/trousers sys-apps/flashrom
 DESCRIPTION=Chrome OS verified boot tools
 EAPI=8
 HOMEPAGE=https://chromium.googlesource.com/chromiumos/platform/vboot_reference/ https://dev.chromium.org/chromium-os/chromiumos-design-docs/verified-boot
-INHERIT=toolchain-funcs
+INHERIT=git-r3 toolchain-funcs
 IUSE=+libzip minimal static
 KEYWORDS=~amd64 ~arm ~arm64 ~mips ~x86
 LICENSE=BSD
+PROPERTIES=live
 RDEPEND=!static? ( elibc_musl? ( sys-libs/fts-standalone:= ) dev-libs/openssl:0= libzip? ( dev-libs/libzip:= ) sys-apps/util-linux:= !minimal? ( dev-libs/libyaml:= app-arch/xz-utils:= ) )
 SLOT=0
-SRC_URI=https://chromium.googlesource.com/chromiumos/platform/vboot_reference/+archive/a975eed306e16947c30b48ccd25ab67a37295742.tar.gz -> vboot-utils-105_p20220715.tar.gz
-_eclasses_=toolchain-funcs	441f754fd75cd4fd1fa06fbc17da6144	multilib	5ca4e49abed8e3a2f7b56920eadee157
-_md5_=b1d0534543858ff358114020107070cd
+_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	toolchain-funcs	513c31b3346458ed1f3878b57da6d61c	multilib	c19072c3cd7ac5cb21de013f7e9832e0
+_md5_=24f419e9b1a3aee67482a48f22fee013
