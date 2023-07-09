@@ -359,15 +359,15 @@ install_iwlwifi() {
 			;;
 		iwlwifi-so)
 			case "${kernel}" in
-			kernel-5_15)     doins "${x}-a0-gf-a0-81.ucode" ;;
+			kernel-5_15)     doins "${x}-a0-gf-a0-83.ucode" ;;
 			kernel-upstream) doins "${x}-a0-gf-a0-74.ucode" ;;
-			*)               doins "${x}-a0-gf-a0-81.ucode" ;;
+			*)               doins "${x}-a0-gf-a0-83.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm" ;;
 		iwlwifi-so-a0-hr)
 			case "${kernel}" in
 			kernel-upstream) doins "${x}-b0-74.ucode" ;;
-			*)               doins "${x}-b0-81.ucode" ;;
+			*)               doins "${x}-b0-83.ucode" ;;
 			esac
 			;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
@@ -435,7 +435,7 @@ src_install() {
 	use_fw rtl8125a-3 && doins_subdir rtl_nic/rtl8125a-3.fw
 	use_fw rtl8125b-1 && doins_subdir rtl_nic/rtl8125b-1.fw
 	use_fw rtl8125b-2 && doins_subdir rtl_nic/rtl8125b-2.fw
-	use_fw rtl8153 && doins_subdir rtl_nic/rtl8153*.fw
+	use_fw rtl8153 && doins_subdir rtl_nic/rtl815[36]*.fw
 	use_fw rtl8168fp-3 && doins_subdir rtl_nic/rtl8168fp-3.fw
 	use_fw rtl8168g-1 && doins_subdir rtl_nic/rtl8168g-1.fw
 	use_fw rtl8168g-2 && doins_subdir rtl_nic/rtl8168g-2.fw
