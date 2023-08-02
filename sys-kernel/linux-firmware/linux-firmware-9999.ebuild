@@ -78,6 +78,7 @@ IUSE_LINUX_FIRMWARE=(
 	amdgpu_dimgrey_cavefish
 	amdgpu_gc_10_3_7
 	amdgpu_gc_11_0_1
+	amdgpu_gc_11_0_4
 	amdgpu_green_sardine
 	amdgpu_navy_flounder
 	amdgpu_picasso
@@ -170,6 +171,7 @@ LICENSE="
 	linux_firmware_amdgpu_dimgrey_cavefish? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_gc_10_3_7? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_gc_11_0_1? ( LICENSE.amdgpu )
+	linux_firmware_amdgpu_gc_11_0_4? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_green_sardine? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_navy_flounder? ( LICENSE.amdgpu )
 	linux_firmware_amdgpu_picasso? ( LICENSE.amdgpu )
@@ -475,6 +477,11 @@ src_install() {
 		doins_subdir amdgpu/psp_13_0_4_*
 		doins_subdir amdgpu/sdma_6_0_1*
 		doins_subdir amdgpu/vcn_4_0_2.bin
+	fi
+
+	if use_fw amdgpu_gc_11_0_4; then
+		doins_subdir amdgpu/gc_11_0_4_*
+		doins_subdir amdgpu/psp_13_0_11_*
 	fi
 
 	if use_fw amdgpu_green_sardine; then
