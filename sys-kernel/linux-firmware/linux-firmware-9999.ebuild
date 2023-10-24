@@ -5,7 +5,7 @@ EAPI="7"
 
 inherit git-r3
 
-DESCRIPTION="Firmware images from the upstream linux-fimware package"
+DESCRIPTION="Firmware images from the upstream linux-firmware package"
 HOMEPAGE="https://git.kernel.org/cgit/linux/kernel/git/firmware/linux-firmware.git/"
 
 EGIT_REPO_URI="https://chromium.googlesource.com/chromiumos/third_party/linux-firmware.git"
@@ -74,20 +74,6 @@ IUSE_LINUX_FIRMWARE=(
 	ath11k_wcn6750
 	ath11k_wcn6855
 	amd_ucode
-	amdgpu_carrizo
-	amdgpu_dimgrey_cavefish
-	amdgpu_gc_10_3_7
-	amdgpu_gc_11_0_1
-	amdgpu_gc_11_0_4
-	amdgpu_green_sardine
-	amdgpu_navy_flounder
-	amdgpu_picasso
-	amdgpu_raven2
-	amdgpu_renoir
-	amdgpu_sienna_cichlid
-	amdgpu_stoney
-	amdgpu_vega12
-	amdgpu_yellow_carp
 	bcm4354-bt
 	cros-pd
 	fw_sst
@@ -119,6 +105,7 @@ IUSE_LINUX_FIRMWARE=(
 	mt7922-bt
 	mt8173-vpu
 	nvidia-xusb
+	nxp_uwb_sr150
 	qca6174a-3-bt
 	qca6174a-5-bt
 	qca-wcn3990-bt
@@ -167,20 +154,6 @@ LICENSE="
 	linux_firmware_adsp_kbl? ( LICENCE.adsp_sst )
 	linux_firmware_adsp_skl? ( LICENCE.adsp_sst )
 	linux_firmware_amd_ucode? ( LICENSE.amd-ucode )
-	linux_firmware_amdgpu_carrizo? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_dimgrey_cavefish? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_gc_10_3_7? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_gc_11_0_1? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_gc_11_0_4? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_green_sardine? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_navy_flounder? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_picasso? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_raven2? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_renoir? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_sienna_cichlid? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_stoney? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_vega12? ( LICENSE.amdgpu )
-	linux_firmware_amdgpu_yellow_carp? ( LICENSE.amdgpu )
 	linux_firmware_ath3k-all? ( LICENCE.atheros_firmware )
 	linux_firmware_ath3k-ar3011? ( LICENCE.atheros_firmware )
 	linux_firmware_ath3k-ar3012? ( LICENCE.atheros_firmware )
@@ -221,6 +194,7 @@ LICENSE="
 	linux_firmware_mt7922-bt? ( LICENCE.mediatek-nic )
 	linux_firmware_mt8173-vpu? ( LICENCE.mediatek-vpu )
 	linux_firmware_nvidia-xusb? ( LICENCE.nvidia )
+	linux_firmware_nxp_uwb_sr150? ( LICENSE.nxp )
 	linux_firmware_qca6174a-3-bt? ( LICENSE.QualcommAtheros_ath10k )
 	linux_firmware_qca6174a-5-bt? ( LICENSE.QualcommAtheros_ath10k )
 	linux_firmware_qca-wcn3990-bt? ( LICENSE.QualcommAtheros_ath10k )
@@ -267,9 +241,6 @@ RDEPEND="
 	linux_firmware_ath3k-all? ( !net-wireless/ath3k )
 	linux_firmware_ath3k-ar3011? ( !net-wireless/ath3k )
 	linux_firmware_ath3k-ar3012? ( !net-wireless/ath3k )
-	linux_firmware_keyspan_usb? (
-		!sys-kernel/chromeos-kernel-4_4[firmware_install]
-	)
 	linux_firmware_marvell-pcie8897? ( !net-wireless/marvell_sd8787[pcie] )
 	linux_firmware_marvell-pcie8997? ( !net-wireless/marvell_sd8787[pcie] )
 	linux_firmware_mt8173-vpu? ( !media-libs/vpu-fw )
@@ -341,7 +312,7 @@ install_iwlwifi() {
 		iwlwifi-cc)
 			case "${kernel}" in
 			kernel-5_15)     doins "${x}-a0-77.ucode" ;;
-			kernel-upstream) doins "${x}-a0-74.ucode" ;;
+			kernel-upstream) doins "${x}-a0-77.ucode" ;;
 			*)               doins "${x}-a0-77.ucode" ;;
 			esac
 			;;
@@ -351,7 +322,7 @@ install_iwlwifi() {
 			kernel-5_4)  doins "${x}-a0-hr-b0-77.ucode" ;;
 			kernel-5_10) doins "${x}-a0-hr-b0-77.ucode" ;;
 			kernel-5_15) doins "${x}-a0-hr-b0-77.ucode" ;;
-			kernel-upstream)  doins "${x}-a0-hr-b0-74.ucode" ;;
+			kernel-upstream)  doins "${x}-a0-hr-b0-77.ucode" ;;
 			*)
 				ewarn "Unexpected kernel version '${kernel}'."
 				ewarn "Installing all '${x}' files."
@@ -362,13 +333,13 @@ install_iwlwifi() {
 		iwlwifi-so)
 			case "${kernel}" in
 			kernel-5_15)     doins "${x}-a0-gf-a0-83.ucode" ;;
-			kernel-upstream) doins "${x}-a0-gf-a0-74.ucode" ;;
+			kernel-upstream) doins "${x}-a0-gf-a0-83.ucode" ;;
 			*)               doins "${x}-a0-gf-a0-83.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm" ;;
 		iwlwifi-so-a0-hr)
 			case "${kernel}" in
-			kernel-upstream) doins "${x}-b0-74.ucode" ;;
+			kernel-upstream) doins "${x}-b0-83.ucode" ;;
 			*)               doins "${x}-b0-83.ucode" ;;
 			esac
 			;;
@@ -425,6 +396,7 @@ src_install() {
 	use_fw mt7922-bt && doins_subdir mediatek/BT_RAM_CODE_MT7922_1_1_hdr.bin
 	use_fw mt8173-vpu && doins_subdir mediatek/mt8173/vpu_{d,p}.bin
 	use_fw nvidia-xusb && doins_subdir nvidia/tegra*/xusb.bin
+	use_fw nxp_uwb_sr150 && doins_subdir nxp/sr150_fw.bin
 	use_fw qca6174a-3-bt && doins_subdir qca/{nvm,rampatch}_0044*.bin
 	use_fw qca6174a-5-bt && doins_subdir qca/{nvm,rampatch}_usb_00000302*.bin
 	use_fw qca-wcn3990-bt && doins_subdir qca/{crbtfw21.tlv,crnv21.bin}
@@ -454,72 +426,6 @@ src_install() {
 	use_fw venus-54 && doins_subdir qcom/venus-5.4/*
 	use_fw venus-vpu-2 && doins_subdir qcom/vpu-2.0/*
 	use video_cards_radeon && doins_subdir radeon/*
-
-	if use_fw amdgpu_carrizo; then
-		doins_subdir amdgpu/carrizo*
-	fi
-
-	if use_fw amdgpu_dimgrey_cavefish; then
-		doins_subdir amdgpu/dimgrey_cavefish*
-	fi
-
-	if use_fw amdgpu_gc_10_3_7; then
-		doins_subdir amdgpu/dcn_3_1_6*
-		doins_subdir amdgpu/gc_10_3_7_*
-		doins_subdir amdgpu/psp_13_0_8_*
-		doins_subdir amdgpu/sdma_5_2_7*
-		doins_subdir amdgpu/yellow_carp_vcn.bin
-	fi
-
-	if use_fw amdgpu_gc_11_0_1; then
-		doins_subdir amdgpu/dcn_3_1_4*
-		doins_subdir amdgpu/gc_11_0_1_*
-		doins_subdir amdgpu/psp_13_0_4_*
-		doins_subdir amdgpu/sdma_6_0_1*
-		doins_subdir amdgpu/vcn_4_0_2.bin
-	fi
-
-	if use_fw amdgpu_gc_11_0_4; then
-		doins_subdir amdgpu/gc_11_0_4_*
-		doins_subdir amdgpu/psp_13_0_11_*
-	fi
-
-	if use_fw amdgpu_green_sardine; then
-		doins_subdir amdgpu/green_sardine*
-	fi
-
-	if use_fw amdgpu_navy_flounder; then
-		doins_subdir amdgpu/navy_flounder*
-	fi
-
-	if use_fw amdgpu_picasso; then
-		doins_subdir amdgpu/picasso*
-	fi
-
-	if use_fw amdgpu_raven2; then
-		doins_subdir amdgpu/raven_dmcu*
-		doins_subdir amdgpu/raven2*
-	fi
-
-	if use_fw amdgpu_renoir; then
-		doins_subdir amdgpu/renoir*
-	fi
-
-	if use_fw amdgpu_sienna_cichlid; then
-		doins_subdir amdgpu/sienna_cichlid*
-	fi
-
-	if use_fw amdgpu_stoney; then
-		doins_subdir amdgpu/stoney*
-	fi
-
-	if use_fw amdgpu_vega12; then
-		doins_subdir amdgpu/vega12*
-	fi
-
-	if use_fw amdgpu_yellow_carp; then
-		doins_subdir amdgpu/yellow_carp*
-	fi
 
 	use_fw rt2870 && doins rt2870.bin
 
