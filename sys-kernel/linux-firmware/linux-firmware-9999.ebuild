@@ -18,6 +18,7 @@ IUSE_KERNEL_VERS=(
 	kernel-5_4
 	kernel-5_10
 	kernel-5_15
+	kernel-6_1
 	kernel-upstream
 )
 IUSE_ATH3K=(
@@ -49,6 +50,7 @@ IUSE_IWLWIFI=(
 	iwlwifi-9000
 	iwlwifi-9260
 	iwlwifi-cc
+	iwlwifi-ma
 	iwlwifi-QuZ
 	iwlwifi-so
 	iwlwifi-so-a0-hr
@@ -92,6 +94,7 @@ IUSE_LINUX_FIRMWARE=(
 	ibt_ax201
 	ibt_ax203
 	ibt_ax211
+	ibt_be200
 	ibt-hw
 	ice
 	ipu3_fw
@@ -182,6 +185,7 @@ LICENSE="
 	linux_firmware_ibt_ax201? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax203? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax211? ( LICENCE.ibt_firmware )
+	linux_firmware_ibt_be200? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt-hw? ( LICENCE.ibt_firmware )
 	linux_firmware_ice? ( LICENSE.ice )
 	linux_firmware_keyspan_usb? ( LICENSE.keyspan_usb )
@@ -316,6 +320,13 @@ install_iwlwifi() {
 			*)               doins "${x}-a0-77.ucode" ;;
 			esac
 			;;
+		iwlwifi-ma)
+			case "${kernel}" in
+			kernel-6_1)      doins "${x}-b0-gf-a0-83.ucode" ;;
+			*)               doins "${x}-b0-gf-a0-83.ucode" ;;
+			esac
+			doins "${x}-b0-gf-a0.pnvm"
+			;;
 		iwlwifi-QuZ)
 			case "${kernel}" in
 			kernel-4_19) doins "${x}-a0-hr-b0-77.ucode" ;;
@@ -336,7 +347,8 @@ install_iwlwifi() {
 			kernel-upstream) doins "${x}-a0-gf-a0-83.ucode" ;;
 			*)               doins "${x}-a0-gf-a0-83.ucode" ;;
 			esac
-			doins "${x}-a0-gf-a0.pnvm" ;;
+			doins "${x}-a0-gf-a0.pnvm"
+			;;
 		iwlwifi-so-a0-hr)
 			case "${kernel}" in
 			kernel-upstream) doins "${x}-b0-83.ucode" ;;
@@ -384,6 +396,7 @@ src_install() {
 	use_fw ibt_ax201 && doins_subdir intel/ibt-19-*.*
 	use_fw ibt_ax203 && doins_subdir intel/ibt-0040-4150.*
 	use_fw ibt_ax211 && doins_subdir intel/ibt-0040-0041.*
+	use_fw ibt_be200 && doins_subdir intel/ibt-0291-0291.*
 	use_fw ibt-hw && doins_subdir intel/ibt-hw-*.bseq
 	use_fw ice && doins_subdir intel/ice/ddp/*
 	use_fw keyspan_usb && doins_subdir keyspan/*
