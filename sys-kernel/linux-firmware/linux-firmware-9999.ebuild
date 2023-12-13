@@ -19,6 +19,7 @@ IUSE_KERNEL_VERS=(
 	kernel-5_10
 	kernel-5_15
 	kernel-6_1
+	kernel-6_6
 	kernel-upstream
 )
 IUSE_ATH3K=(
@@ -50,6 +51,7 @@ IUSE_IWLWIFI=(
 	iwlwifi-9000
 	iwlwifi-9260
 	iwlwifi-cc
+	iwlwifi-gl
 	iwlwifi-ma
 	iwlwifi-QuZ
 	iwlwifi-so
@@ -320,10 +322,17 @@ install_iwlwifi() {
 			*)               doins "${x}-a0-77.ucode" ;;
 			esac
 			;;
+		iwlwifi-gl)
+			case "${kernel}" in
+			kernel-6_1)      doins "${x}-c0-fm-c0-86.ucode" ;;
+			*)               doins "${x}-c0-fm-c0-86.ucode" ;;
+			esac
+			doins "${x}-c0-fm-c0.pnvm"
+			;;
 		iwlwifi-ma)
 			case "${kernel}" in
-			kernel-6_1)      doins "${x}-b0-gf-a0-83.ucode" ;;
-			*)               doins "${x}-b0-gf-a0-83.ucode" ;;
+			kernel-6_1)      doins "${x}-b0-gf-a0-86.ucode" ;;
+			*)               doins "${x}-b0-gf-a0-86.ucode" ;;
 			esac
 			doins "${x}-b0-gf-a0.pnvm"
 			;;
@@ -343,16 +352,17 @@ install_iwlwifi() {
 			;;
 		iwlwifi-so)
 			case "${kernel}" in
-			kernel-5_15)     doins "${x}-a0-gf-a0-83.ucode" ;;
+			kernel-5_15)     doins "${x}-a0-gf-a0-86.ucode" ;;
+			kernel-6_6)      doins "${x}-a0-gf-a0-83.ucode" ;;
 			kernel-upstream) doins "${x}-a0-gf-a0-83.ucode" ;;
-			*)               doins "${x}-a0-gf-a0-83.ucode" ;;
+			*)               doins "${x}-a0-gf-a0-86.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm"
 			;;
 		iwlwifi-so-a0-hr)
 			case "${kernel}" in
 			kernel-upstream) doins "${x}-b0-83.ucode" ;;
-			*)               doins "${x}-b0-83.ucode" ;;
+			*)               doins "${x}-b0-86.ucode" ;;
 			esac
 			;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
