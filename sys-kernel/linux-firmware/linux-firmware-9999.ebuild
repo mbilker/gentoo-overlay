@@ -86,7 +86,6 @@ IUSE_LINUX_FIRMWARE=(
 	i915_bxt
 	i915_cnl
 	i915_glk
-	i915_jsl
 	i915_kbl
 	i915_skl
 	i915_tgl
@@ -96,6 +95,7 @@ IUSE_LINUX_FIRMWARE=(
 	ibt_ax201
 	ibt_ax203
 	ibt_ax211
+	ibt_ax211_mtl
 	ibt_be200
 	ibt-hw
 	ice
@@ -176,7 +176,6 @@ LICENSE="
 	linux_firmware_i915_bxt? ( LICENSE.i915 )
 	linux_firmware_i915_cnl? ( LICENSE.i915 )
 	linux_firmware_i915_glk? ( LICENSE.i915 )
-	linux_firmware_i915_jsl? ( LICENSE.i915 )
 	linux_firmware_i915_kbl? ( LICENSE.i915 )
 	linux_firmware_i915_skl? ( LICENSE.i915 )
 	linux_firmware_i915_tgl? ( LICENSE.i915 )
@@ -187,6 +186,7 @@ LICENSE="
 	linux_firmware_ibt_ax201? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax203? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_ax211? ( LICENCE.ibt_firmware )
+	linux_firmware_ibt_ax211_mtl? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt_be200? ( LICENCE.ibt_firmware )
 	linux_firmware_ibt-hw? ( LICENCE.ibt_firmware )
 	linux_firmware_ice? ( LICENSE.ice )
@@ -324,15 +324,16 @@ install_iwlwifi() {
 			;;
 		iwlwifi-gl)
 			case "${kernel}" in
-			kernel-6_1)      doins "${x}-c0-fm-c0-86.ucode" ;;
-			*)               doins "${x}-c0-fm-c0-86.ucode" ;;
+			kernel-6_1)      doins "${x}-c0-fm-c0-88.ucode" ;;
+			kernel-6_6)      doins "${x}-c0-fm-c0-88.ucode" ;;
+			*)               doins "${x}-c0-fm-c0-88.ucode" ;;
 			esac
 			doins "${x}-c0-fm-c0.pnvm"
 			;;
 		iwlwifi-ma)
 			case "${kernel}" in
-			kernel-6_1)      doins "${x}-b0-gf-a0-86.ucode" ;;
-			*)               doins "${x}-b0-gf-a0-86.ucode" ;;
+			kernel-6_1)      doins "${x}-b0-gf-a0-88.ucode" ;;
+			*)               doins "${x}-b0-gf-a0-88.ucode" ;;
 			esac
 			doins "${x}-b0-gf-a0.pnvm"
 			;;
@@ -352,17 +353,17 @@ install_iwlwifi() {
 			;;
 		iwlwifi-so)
 			case "${kernel}" in
-			kernel-5_15)     doins "${x}-a0-gf-a0-86.ucode" ;;
-			kernel-6_6)      doins "${x}-a0-gf-a0-83.ucode" ;;
-			kernel-upstream) doins "${x}-a0-gf-a0-83.ucode" ;;
-			*)               doins "${x}-a0-gf-a0-86.ucode" ;;
+			kernel-5_15)     doins "${x}-a0-gf-a0-88.ucode" ;;
+			kernel-6_6)      doins "${x}-a0-gf-a0-88.ucode" ;;
+			kernel-upstream) doins "${x}-a0-gf-a0-86.ucode" ;;
+			*)               doins "${x}-a0-gf-a0-88.ucode" ;;
 			esac
 			doins "${x}-a0-gf-a0.pnvm"
 			;;
 		iwlwifi-so-a0-hr)
 			case "${kernel}" in
-			kernel-upstream) doins "${x}-b0-83.ucode" ;;
-			*)               doins "${x}-b0-86.ucode" ;;
+			kernel-upstream) doins "${x}-b0-86.ucode" ;;
+			*)               doins "${x}-b0-88.ucode" ;;
 			esac
 			;;
 		iwlwifi-*) doins "${x}"-*.ucode ;;
@@ -395,7 +396,6 @@ src_install() {
 	use_fw i915_bxt && doins_subdir i915/bxt*
 	use_fw i915_cnl && doins_subdir i915/cnl*
 	use_fw i915_glk && doins_subdir i915/glk*
-	use_fw i915_jsl && doins_subdir i915/icl_dmc_ver1_09.bin && doins_subdir i915/ehl*
 	use_fw i915_kbl && doins_subdir i915/kbl*
 	use_fw i915_skl && doins_subdir i915/skl*
 	use_fw i915_tgl && doins_subdir i915/tgl*
@@ -406,6 +406,7 @@ src_install() {
 	use_fw ibt_ax201 && doins_subdir intel/ibt-19-*.*
 	use_fw ibt_ax203 && doins_subdir intel/ibt-0040-4150.*
 	use_fw ibt_ax211 && doins_subdir intel/ibt-0040-0041.*
+	use_fw ibt_ax211_mtl && doins_subdir intel/ibt-0180-0041.*
 	use_fw ibt_be200 && doins_subdir intel/ibt-0291-0291.*
 	use_fw ibt-hw && doins_subdir intel/ibt-hw-*.bseq
 	use_fw ice && doins_subdir intel/ice/ddp/*
