@@ -6,9 +6,9 @@ EAPI=8
 inherit git-r3 toolchain-funcs
 
 # This is the name of the latest release branch.
-RELEASE="release-R116-15509.B"
-# This is the latest commit in the release-R116-15509.B branch.
-#GIT_SHA1="3107ce77310de08404a6300bd72274e4a4c65745"
+RELEASE="release-R125-15853.B"
+# This is the latest commit in the release-R125-15853.B branch.
+#GIT_SHA1="d30d6b54d3002a7d100cb2a2a97253ccf331cfcf"
 
 DESCRIPTION="Chrome OS verified boot tools"
 HOMEPAGE="https://chromium.googlesource.com/chromiumos/platform/vboot_reference/ https://dev.chromium.org/chromium-os/chromiumos-design-docs/verified-boot"
@@ -38,7 +38,7 @@ DEPEND="${RDEPEND}
 		!minimal? ( ${LIB_DEPEND} )
 	)
 	app-crypt/trousers
-	sys-apps/flashrom"
+	=sys-apps/flashrom-${PV}"
 BDEPEND="virtual/pkgconfig"
 
 #PATCHES=(
