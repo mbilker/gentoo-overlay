@@ -11,5 +11,5 @@ LICENSE=BSD
 PROPERTIES=live
 RDEPEND=!static? ( elibc_musl? ( sys-libs/fts-standalone:= ) dev-libs/openssl:0= libzip? ( dev-libs/libzip:= ) sys-apps/util-linux:= !minimal? ( dev-libs/libyaml:= app-arch/xz-utils:= ) )
 SLOT=0
-_eclasses_=git-r3	27e13c09a4c7e4c78ac812f74727e676	toolchain-funcs	513c31b3346458ed1f3878b57da6d61c	multilib	c19072c3cd7ac5cb21de013f7e9832e0
-_md5_=24f419e9b1a3aee67482a48f22fee013
+_eclasses_=git-r3	fbb2889c81f3a05910c1524db69425c1	toolchain-funcs	e56c7649b804f051623c8bc1a1c44084	multilib	c19072c3cd7ac5cb21de013f7e9832e0
+_md5_=df1cd9b3ed39ff4d49fc58105c509e39

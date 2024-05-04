@@ -76,7 +76,9 @@ _emake() {
 		MINIMAL=$(usev minimal) \
 		STATIC=$(usev static) \
 		$(usex elibc_musl HAVE_MUSL=1 "") \
-		USE_FLASHROM= \
+		TPM2_MODE=tpm2 \
+		USE_FLASHROM=flashrom \
+		HAVE_CROSID=1 \
 		"$@"
 }
 
