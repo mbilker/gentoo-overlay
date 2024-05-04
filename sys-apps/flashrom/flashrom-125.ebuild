@@ -102,12 +102,12 @@ DEPEND="${COMMON}
 	realtek-mst-i2c-spi? ( sys-kernel/linux-headers )"
 BDEPEND="test? ( dev-util/cmocka )"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-1.3.0_spi-master.patch
-	"${FILESDIR}"/${PN}-1.3.0-c99.patch
-)
+#PATCHES=(
+#	"${FILESDIR}"/${PN}-1.3.0_spi-master.patch
+#	"${FILESDIR}"/${PN}-1.3.0-c99.patch
+#)
 
-DOCS=( README Documentation/ )
+DOCS=( README.chromiumos Documentation/ )
 
 src_configure() {
 	local programmers="$(printf '%s,' $(for flag in ${IUSE_PROGRAMMERS//+/}; do usev ${flag}; done))"
