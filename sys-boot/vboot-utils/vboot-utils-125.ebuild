@@ -38,6 +38,7 @@ DEPEND="${RDEPEND}
 		!minimal? ( ${LIB_DEPEND} )
 	)
 	app-crypt/trousers
+	dev-libs/nss
 	=sys-apps/flashrom-${PV}"
 BDEPEND="virtual/pkgconfig"
 
